@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Utkarsh Pal — Product Management Portfolio</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
   :root{
     --paper: #f5f3ee;
     --paper-2: #eeece4;
+    --card: #fffdf8;
     --ink: #1a1a18;
     --ink-soft: #6b6862;
     --line: #d8d4c8;
@@ -19,10 +20,11 @@
     --ochre-soft: #f1e6cf;
     --tag-bg: #eae6d9;
     --max: 980px;
+    --nav-h: 84px;
   }
 
   *{ box-sizing:border-box; }
-  html{ scroll-behavior:smooth; }
+  html{ scroll-behavior:smooth; overflow-x:hidden; }
 
   body{
     margin:0;
@@ -32,7 +34,10 @@
     font-size:17px;
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    padding-top:var(--header-h, 61px);
   }
+  body.menu-open{ overflow:hidden; touch-action:none; }
 
   h1,h2,h3,h4{
     font-family:'Fraunces', Georgia, serif;
@@ -42,74 +47,150 @@
     color:var(--ink);
   }
 
-  .mono{
-    font-family:'IBM Plex Mono', monospace;
-    letter-spacing:0.04em;
-  }
-
+  .mono{ font-family:'IBM Plex Mono', monospace; letter-spacing:0.04em; }
   a{ color:var(--navy); }
 
-  .wrap{
-    max-width:var(--max);
-    margin:0 auto;
-    padding:0 28px;
-  }
+  .wrap{ max-width:var(--max); margin:0 auto; padding:0 28px; }
+  .wrap.wide{ max-width:1120px; }
 
   /* ---------- NAV ---------- */
   header.site-nav{
-    position:sticky;
+    position:fixed;
     top:0;
+    left:0;
+    right:0;
     z-index:50;
-    background:rgba(245,243,238,0.92);
+    background:rgba(245,243,238,0.96);
     backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
     border-bottom:1px solid var(--line);
   }
   .nav-inner{
-    max-width:var(--max);
+    max-width:1120px;
     margin:0 auto;
-    padding:16px 28px;
+    padding:14px 28px;
     display:flex;
     align-items:center;
     justify-content:space-between;
+    gap:20px;
   }
   .nav-inner .brand{
     font-family:'Fraunces', serif;
     font-weight:600;
-    font-size:1.05rem;
+    font-size:1.35rem;
     text-decoration:none;
     color:var(--ink);
+    white-space:nowrap;
   }
   .nav-links{
     display:flex;
-    gap:22px;
+    gap:8px;
     list-style:none;
     margin:0; padding:0;
   }
   .nav-links a{
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    display:inline-block;
     font-family:'IBM Plex Mono', monospace;
-    font-size:0.72rem;
+    font-size:0.68rem;
     text-transform:uppercase;
     letter-spacing:0.08em;
     text-decoration:none;
+    white-space:nowrap;
     color:var(--ink-soft);
-    transition:color .15s ease;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:7px 14px;
+    transition:color .25s ease, border-color .25s ease, transform .2s ease, box-shadow .25s ease;
+    -webkit-tap-highlight-color:transparent;
   }
-  .nav-links a:hover{ color:var(--navy); }
-  .nav-toggle{ display:none; }
+  .nav-links a::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:var(--navy);
+    transform:translateY(101%);
+    transition:transform .3s cubic-bezier(.2,.7,.3,1);
+    z-index:-1;
+  }
+  .nav-links a:hover,
+  .nav-links a.active{
+    color:var(--paper);
+    border-color:var(--navy);
+    transform:translateY(-2px);
+    box-shadow:0 8px 16px -10px rgba(31,58,95,0.6);
+  }
+  .nav-links a:hover::before,
+  .nav-links a.active::before{ transform:translateY(0); }
+  .nav-links a:active{ transform:scale(0.93); }
+
+  /* mobile menu button (hidden on desktop) */
+  .nav-toggle{
+    display:none;
+    align-items:center;
+    gap:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--ink);
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:9px 14px;
+    min-height:40px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:background .25s ease, color .25s ease, border-color .25s ease, transform .15s ease;
+  }
+  .nav-toggle:active{ transform:scale(0.94); }
+  .burger{ position:relative; width:16px; height:10px; display:inline-block; }
+  .burger i{
+    position:absolute;
+    left:0; right:0;
+    height:1.5px;
+    background:currentColor;
+    border-radius:2px;
+    transition:transform .3s ease, top .3s ease;
+  }
+  .burger i:first-child{ top:0; }
+  .burger i:last-child{ top:8.5px; }
+  .site-nav.open .nav-toggle{ background:var(--navy); color:var(--paper); border-color:var(--navy); }
+  .site-nav.open .burger i:first-child{ top:4.25px; transform:rotate(45deg); }
+  .site-nav.open .burger i:last-child{ top:4.25px; transform:rotate(-45deg); }
+  .nav-backdrop{ display:none; }
+
+  /* touch ripple (nav, buttons, contact cards) */
+  .ripple{
+    position:absolute;
+    border-radius:50%;
+    background:currentColor;
+    opacity:0.28;
+    transform:scale(0);
+    animation:ripple .6s ease-out forwards;
+    pointer-events:none;
+  }
+  @keyframes ripple{ to{ transform:scale(1); opacity:0; } }
 
   /* ---------- SECTION SCAFFOLD ---------- */
   section{
     padding:88px 0;
     border-bottom:1px solid var(--line);
+    scroll-margin-top:var(--header-h, var(--nav-h));
   }
   section:last-of-type{ border-bottom:none; }
 
-  .eyebrow{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    margin-bottom:22px;
+  .reveal{
+    opacity:0;
+    transform:translateY(20px);
+    transition:opacity .7s ease, transform .7s ease;
   }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+  .eyebrow{ display:flex; align-items:center; gap:14px; margin-bottom:22px; }
   .eyebrow .num{
     font-family:'IBM Plex Mono', monospace;
     font-size:0.78rem;
@@ -125,58 +206,34 @@
     letter-spacing:0.12em;
     color:var(--ink-soft);
   }
-  .eyebrow .label.flat{
-    color:var(--navy);
-  }
+  .eyebrow .label.flat{ color:var(--navy); }
 
-  .hero-name{
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:600;
-    font-size:clamp(1.6rem, 3vw, 2.1rem);
-    color:var(--ink);
-    margin:0 0 10px;
-  }
+  .section-title{ font-size:2.2rem; max-width:620px; }
+  .section-lede{ color:var(--ink-soft); max-width:600px; margin-top:14px; }
 
   /* ---------- HERO ---------- */
-  .hero{
-    padding-top:70px;
-    padding-bottom:80px;
-  }
+  .hero{ padding-top:64px; padding-bottom:80px; }
   .hero-grid{
     display:grid;
-    grid-template-columns: 1fr auto;
-    gap:40px;
-    align-items:end;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:48px;
+    align-items:center;
   }
   .hero h1{
-    font-size:clamp(2.6rem, 6vw, 4.6rem);
+    font-size:clamp(2.4rem, 5vw, 4.1rem);
     letter-spacing:-0.01em;
   }
-  .hero h1 em{
-    font-style:italic;
-    color:var(--navy);
-  }
+  .hero h1 em{ font-style:italic; color:var(--navy); }
   .hero-sub{
     margin-top:22px;
-    max-width:560px;
+    max-width:540px;
     font-size:1.05rem;
     color:var(--ink-soft);
   }
-  .hero-meta{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    color:var(--ink-soft);
-    text-align:right;
-    line-height:1.9;
-  }
-  .hero-meta a{ color:var(--ink); text-decoration:none; border-bottom:1px solid var(--line); }
-  .hero-cta{
-    margin-top:32px;
-    display:flex;
-    gap:14px;
-    flex-wrap:wrap;
-  }
+  .hero-cta{ margin-top:32px; display:flex; gap:14px; flex-wrap:wrap; }
   .btn{
+    position:relative;
+    overflow:hidden;
     display:inline-block;
     font-family:'IBM Plex Mono', monospace;
     font-size:0.75rem;
@@ -187,83 +244,176 @@
     border-radius:2px;
     border:1px solid var(--ink);
     color:var(--ink);
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+    -webkit-tap-highlight-color:transparent;
   }
-  .btn.primary{
-    background:var(--navy);
-    border-color:var(--navy);
-    color:var(--paper);
-  }
-  .hero-rule{
-    margin-top:56px;
-    border:none;
-    border-top:1px solid var(--line);
-  }
+  .btn:hover{ transform:translateY(-3px); box-shadow:0 10px 20px -10px rgba(26,26,24,0.4); }
+  .btn:active{ transform:scale(0.96); }
+  .btn.primary{ background:var(--navy); border-color:var(--navy); color:var(--paper); }
+  .btn.primary:hover{ background:var(--navy-deep); box-shadow:0 10px 20px -10px rgba(31,58,95,0.55); }
 
-  /* ---------- ABOUT ---------- */
-  .about-grid{
-    display:grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    gap:56px;
+  /* ---------- ABOUT VISUAL (hero right) ---------- */
+  .about-visual{
+    position:relative;
+    overflow:hidden;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:16px 18px 20px;
+    box-shadow:0 2px 0 var(--line), 0 18px 40px -24px rgba(26,26,24,0.35);
   }
-  .about-grid h2{
-    font-size:2rem;
-  }
-  .about-copy p{ margin:0 0 16px; }
-  .about-copy p:last-child{ margin-bottom:0; }
-  .value-list{
-    list-style:none;
-    margin:28px 0 0;
-    padding:0;
-    border-top:1px solid var(--line);
-  }
-  .value-list li{
-    padding:14px 0;
-    border-bottom:1px solid var(--line);
-    display:grid;
-    grid-template-columns: 22px 1fr;
-    gap:10px;
-    font-size:0.96rem;
-  }
-  .value-list li .arrow{ color:var(--navy); font-family:'IBM Plex Mono', monospace; }
-
-  /* ---------- CASE STUDIES ---------- */
-  .cs-item{
-    padding:44px 0;
-    border-top:1px solid var(--line);
-  }
-  .cs-item:first-of-type{ border-top:none; padding-top:0; }
-  .cs-head{
+  .av-top{
     display:flex;
     justify-content:space-between;
-    align-items:baseline;
-    gap:16px;
-    flex-wrap:wrap;
-  }
-  .cs-head h3{
-    font-size:1.65rem;
-    max-width:640px;
-  }
-  .cs-num{
     font-family:'IBM Plex Mono', monospace;
-    font-size:0.8rem;
+    font-size:0.62rem;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
     color:var(--ink-soft);
+  }
+  .av-top .dot{ display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--ochre); margin-right:6px; animation:blink 1.8s ease-in-out infinite; }
+  @keyframes blink{ 50%{ opacity:0.25; } }
+
+  .av-stage{
+    position:relative;
+    aspect-ratio:1/1;
+    margin:10px 4px 6px;
+    border-radius:12px;
+    background-image:radial-gradient(var(--line) 1px, transparent 1px);
+    background-size:18px 18px;
+  }
+  .av-stage img, .av-stage video{ width:100%; height:100%; object-fit:cover; border-radius:12px; display:block; }
+  .ring{
+    position:absolute;
+    top:50%; left:50%;
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+  }
+  .ring.inner{ width:60%; height:60%; border:1px dashed rgba(31,58,95,0.45); }
+  .ring.outer{ width:84%; height:84%; border:1px dashed rgba(179,129,31,0.5); }
+
+  .orbit{ position:absolute; inset:0; animation:spin 48s linear infinite; }
+  .orbit.rev{ animation:spin 70s linear infinite reverse; }
+  .chip{ position:absolute; transform:translate(-50%,-50%); }
+  .chip > span{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.6rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
     white-space:nowrap;
+    background:var(--paper);
+    border:1px solid var(--navy);
+    color:var(--navy);
+    border-radius:999px;
+    padding:5px 10px;
+    animation:spin 48s linear infinite reverse;
   }
-  .cs-hook{
-    margin-top:10px;
-    font-style:italic;
-    color:var(--ink-soft);
-    max-width:640px;
+  .orbit.rev .chip > span{
+    border-color:#e2cf9c;
+    background:var(--ochre-soft);
+    color:#7a5a12;
+    animation:spin 70s linear infinite;
   }
-  .tags{
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .av-core{
+    position:absolute;
+    top:50%; left:50%;
+    width:30%;
+    aspect-ratio:1/1;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:var(--navy);
+    color:var(--paper);
     display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-top:18px;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
   }
-  .tag{
+  .av-core::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    border:1px solid var(--navy);
+    animation:pulse 2.8s ease-out infinite;
+  }
+  @keyframes pulse{ from{ transform:scale(1); opacity:0.6; } to{ transform:scale(1.75); opacity:0; } }
+  .av-core .why{ font-family:'Fraunces', serif; font-style:italic; font-size:clamp(1.3rem, 2.6vw, 1.8rem); line-height:1; }
+  .av-core .then{ font-family:'IBM Plex Mono', monospace; font-size:0.52rem; text-transform:uppercase; letter-spacing:0.1em; opacity:0.75; margin-top:5px; }
+
+  .av-caption{ border-top:1px solid var(--line); padding-top:14px; margin-top:8px; }
+  .av-motto{ margin:0; font-family:'Fraunces', serif; font-weight:600; font-size:1.05rem; }
+  .av-rotator{ margin:6px 0 0; min-height:2.9em; font-size:0.92rem; color:var(--ink-soft); display:flex; gap:8px; }
+  .av-rotator .arrow{ color:var(--navy); font-family:'IBM Plex Mono', monospace; }
+  #avLine{ display:inline-block; transition:opacity .4s ease, transform .4s ease; }
+  #avLine.out{ opacity:0; transform:translateY(6px); }
+
+  /* ---------- CASE STUDIES (card grid) ---------- */
+  .case-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:26px;
+    margin-top:40px;
+  }
+  .case-card{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    min-height:380px;
+    padding:52px 36px 34px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    text-decoration:none;
+    color:var(--ink);
+    box-shadow:0 2px 0 var(--line), 0 12px 28px -18px rgba(26,26,24,0.35);
+    transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .case-card:hover{
+    transform:translateY(-8px) rotate(-0.6deg);
+    border-color:var(--navy);
+    box-shadow:0 2px 0 var(--navy), 0 24px 44px -20px rgba(31,58,95,0.42);
+  }
+  .case-card:nth-child(even):hover{ transform:translateY(-8px) rotate(0.6deg); }
+  .case-kicker{
     font-family:'IBM Plex Mono', monospace;
     font-size:0.66rem;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--ink-soft);
+  }
+  .case-card h3{ font-size:1.55rem; margin-top:10px; line-height:1.18; }
+  .case-hook{ margin:12px 0 0; font-style:italic; color:var(--navy); font-size:1rem; }
+  .case-desc{ margin:10px 0 0; font-size:0.94rem; color:var(--ink-soft); }
+  .case-foot{
+    margin-top:auto;
+    padding-top:24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .case-cta{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--navy);
+    border-bottom:1px solid var(--navy);
+    padding-bottom:2px;
+    white-space:nowrap;
+  }
+  .case-cta .ar{ display:inline-block; transition:transform .25s ease; }
+  .case-card:hover .case-cta .ar{ transform:translate(3px,-3px); }
+
+  .tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.64rem;
     text-transform:uppercase;
     letter-spacing:0.06em;
     background:var(--tag-bg);
@@ -274,91 +424,217 @@
   }
   .tag.ochre{ background:var(--ochre-soft); border-color:#e2cf9c; color:#7a5a12; }
 
-  .cs-cols{
-    margin-top:26px;
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap:24px;
-  }
-  .cs-cols .col .k{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.68rem;
-    text-transform:uppercase;
-    letter-spacing:0.1em;
+  /* playing-card corners (shared) */
+  .playcard-corner{
+    position:absolute;
+    top:16px;
+    left:18px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    line-height:1;
     color:var(--navy);
-    margin-bottom:6px;
-    display:block;
+    font-family:'IBM Plex Mono', monospace;
   }
-  .cs-cols .col p{ margin:0; font-size:0.94rem; color:var(--ink); }
+  .playcard-corner.warm{ color:var(--ochre); }
+  .playcard-corner .idx{ font-size:0.95rem; font-weight:600; }
+  .playcard-corner .suit{ font-size:0.85rem; margin-top:2px; }
+  .playcard-corner.bottom{ top:auto; bottom:16px; left:auto; right:18px; transform:rotate(180deg); }
+  .case-card .playcard-corner.bottom{ display:none; }
 
-  details.cs-more{
-    margin-top:22px;
+  /* ---------- SELECTED ASSIGNMENTS (playing cards) ---------- */
+  .projects-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:28px;
   }
-  details.cs-more summary{
-    cursor:pointer;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.75rem;
-    text-transform:uppercase;
-    letter-spacing:0.08em;
-    color:var(--navy);
-    list-style:none;
-    padding:10px 0;
+  .playcard{
+    position:relative;
+    aspect-ratio:3/4;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:28px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    box-shadow:0 2px 0 var(--line), 0 10px 24px -16px rgba(26,26,24,0.35);
+    transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
   }
-  details.cs-more summary::-webkit-details-marker{ display:none; }
-  details.cs-more summary::before{
-    content:"+ ";
+  .playcard:hover{
+    transform:translateY(-8px) rotate(-1deg);
+    box-shadow:0 2px 0 var(--navy), 0 22px 40px -18px rgba(31,58,95,0.4);
+    border-color:var(--navy);
   }
-  details.cs-more[open] summary::before{
-    content:"– ";
-  }
-  .cs-body{
-    margin-top:8px;
-    padding:22px 26px;
-    background:var(--paper-2);
-    border-left:2px solid var(--navy);
-    border-radius:2px;
-  }
-  .cs-body h4{
+  .playcard-body{ text-align:center; }
+  .playcard-mark{ font-size:2.3rem; color:var(--ochre); }
+  .playcard-company{
     font-family:'IBM Plex Mono', monospace;
     font-size:0.72rem;
     text-transform:uppercase;
     letter-spacing:0.1em;
-    color:var(--navy);
-    margin:22px 0 8px;
-  }
-  .cs-body h4:first-child{ margin-top:0; }
-  .cs-body p, .cs-body li{ font-size:0.94rem; }
-  .cs-body ul{ margin:8px 0; padding-left:20px; }
-  .cs-note{
-    margin-top:16px;
-    font-size:0.85rem;
     color:var(--ink-soft);
-    font-style:italic;
-    border-top:1px dashed var(--line);
-    padding-top:12px;
+    margin-top:12px;
   }
-
-  .notion-link{
-    margin-top:10px;
+  .playcard-title{
+    font-family:'Fraunces', Georgia, serif;
+    font-size:1.4rem;
+    font-weight:600;
+    margin-top:8px;
+    line-height:1.25;
   }
-  .notion-link a{
+  .playcard-desc{ font-size:0.95rem; color:var(--ink-soft); margin-top:12px; }
+  .playcard-link{
+    display:inline-block;
+    margin-top:16px;
     font-family:'IBM Plex Mono', monospace;
-    font-size:0.75rem;
+    font-size:0.7rem;
     text-transform:uppercase;
-    letter-spacing:0.06em;
+    letter-spacing:0.08em;
     color:var(--navy);
     text-decoration:none;
     border-bottom:1px solid var(--navy);
-    padding-bottom:2px;
   }
-  .notion-link a:hover{ opacity:0.75; }
+
+  /* ---------- EXPERIENCE (animated timeline) ---------- */
+  .timeline{ position:relative; margin-top:12px; }
+  .tl-line{
+    position:absolute;
+    left:173px;
+    top:10px;
+    bottom:10px;
+    width:2px;
+    background:var(--line);
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .tl-fill{
+    position:absolute;
+    inset:0;
+    background:var(--navy);
+    transform-origin:top;
+    transform:scaleY(0);
+  }
+  .tl-item{
+    display:grid;
+    grid-template-columns:160px 28px 1fr;
+    grid-template-areas:"when node body";
+    padding-bottom:56px;
+  }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-item .when{
+    grid-area:when;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    text-align:right;
+    padding:4px 18px 0 0;
+  }
+  .tl-node{
+    grid-area:node;
+    justify-self:center;
+    margin-top:6px;
+    width:14px; height:14px;
+    border-radius:50%;
+    background:var(--paper);
+    border:2px solid var(--navy);
+    position:relative;
+    z-index:1;
+    transition:background .5s ease;
+  }
+  .tl-item.is-visible .tl-node{ background:var(--navy); }
+  .tl-item.is-visible .tl-node::after{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius:50%;
+    border:2px solid var(--navy);
+    animation:pulse 2.4s ease-out infinite;
+  }
+  .tl-body{ grid-area:body; padding-left:22px; }
+  .tl-body h3{ font-size:1.35rem; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .tl-body .role{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--navy);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    margin-top:6px;
+    display:block;
+  }
+  .tl-body ul{ margin:16px 0 0; padding-left:20px; }
+  .tl-body li{ margin-bottom:8px; font-size:0.96rem; }
+  .placeholder{ color:var(--ink-soft); font-style:italic; }
+
+  /* Forage — simulation tasks ticking off */
+  .sim-tasks{ display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; }
+  .task{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.64rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+    background:var(--card);
+    border:1px dashed var(--line);
+    border-radius:999px;
+    padding:5px 11px 5px 6px;
+  }
+  .tick{
+    font-style:normal;
+    width:16px; height:16px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:var(--line);
+    color:transparent;
+    font-size:0.6rem;
+  }
+  .tl-item.is-visible .task{ animation:taskDone .45s ease both; }
+  .tl-item.is-visible .task .tick{ animation:tickOn .45s cubic-bezier(.3,1.6,.5,1) both; }
+  .tl-item.is-visible .task:nth-child(1),
+  .tl-item.is-visible .task:nth-child(1) .tick{ animation-delay:.4s; }
+  .tl-item.is-visible .task:nth-child(2),
+  .tl-item.is-visible .task:nth-child(2) .tick{ animation-delay:.9s; }
+  .tl-item.is-visible .task:nth-child(3),
+  .tl-item.is-visible .task:nth-child(3) .tick{ animation-delay:1.4s; }
+  .tl-item.is-visible .task:nth-child(4),
+  .tl-item.is-visible .task:nth-child(4) .tick{ animation-delay:1.9s; }
+  @keyframes taskDone{ to{ color:var(--ink); border-color:var(--navy); border-style:solid; } }
+  @keyframes tickOn{
+    from{ transform:scale(0.5); }
+    to{ transform:scale(1); background:var(--navy); color:var(--paper); }
+  }
+
+  /* Infosys — code line typing */
+  .code-line{
+    display:inline-flex;
+    align-items:center;
+    margin-top:16px;
+    background:var(--ink);
+    color:#eae6d9;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    padding:8px 12px;
+    border-radius:6px;
+    max-width:100%;
+  }
+  .code-line .prompt{ color:#e2cf9c; margin-right:8px; }
+  .typed{
+    display:inline-block;
+    overflow:hidden;
+    white-space:nowrap;
+    width:0;
+    vertical-align:bottom;
+  }
+  .tl-item.is-visible .typed{ animation:type 2.2s steps(36) .5s forwards; }
+  @keyframes type{ to{ width:36ch; } }
+  .caret{ display:inline-block; width:7px; height:1em; background:#e2cf9c; margin-left:3px; animation:blink 1s steps(1) infinite; }
 
   /* ---------- SKILLS ---------- */
-  .skills-grid{
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap:32px;
-  }
+  .skills-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:32px; }
   .skill-block .k{
     font-family:'IBM Plex Mono', monospace;
     font-size:0.72rem;
@@ -370,103 +646,78 @@
     padding-bottom:10px;
     border-bottom:1px solid var(--line);
   }
-  .skill-block ul{
-    list-style:none;
-    margin:0; padding:0;
-  }
-  .skill-block li{
-    padding:7px 0;
-    font-size:0.95rem;
-    border-bottom:1px dotted var(--line);
-  }
+  .skill-block ul{ list-style:none; margin:0; padding:0; }
+  .skill-block li{ padding:7px 0; font-size:0.95rem; border-bottom:1px dotted var(--line); }
   .skill-block li:last-child{ border-bottom:none; }
 
-  .certs{
-    margin-top:48px;
-  }
-  .certs .k{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.72rem;
-    text-transform:uppercase;
-    letter-spacing:0.1em;
-    color:var(--navy);
-    display:block;
-    margin-bottom:16px;
-  }
-  .cert-grid{
-    display:grid;
-    grid-template-columns:repeat(2, 1fr);
-    gap:18px 32px;
-  }
-  .cert-item{
-    padding:14px 0;
-    border-top:1px solid var(--line);
-  }
+  /* ---------- CERTIFICATIONS ---------- */
+  .cert-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:18px 32px; }
+  .cert-item{ padding:14px 0; border-top:1px solid var(--line); }
   .cert-item .name{ font-weight:600; font-family:'Source Serif 4', serif; display:inline-flex; align-items:center; gap:7px; }
-  .cert-link{
-    display:inline-flex;
-    color:var(--navy);
-    text-decoration:none;
-    vertical-align:middle;
-  }
+  .cert-link{ display:inline-flex; color:var(--navy); text-decoration:none; vertical-align:middle; }
   .cert-link svg{ width:14px; height:14px; }
   .cert-link:hover{ opacity:0.7; }
   .cert-item .issuer{ font-family:'IBM Plex Mono', monospace; font-size:0.72rem; color:var(--ink-soft); }
 
-  /* ---------- EXPERIENCE ---------- */
-  .exp-item{
-    display:grid;
-    grid-template-columns: 200px 1fr;
-    gap:28px;
-  }
-  .exp-item .when{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    color:var(--ink-soft);
-    padding-top:4px;
-  }
-  .exp-item h3{ font-size:1.3rem; }
-  .exp-item .role{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    color:var(--navy);
-    text-transform:uppercase;
-    letter-spacing:0.06em;
-    margin-top:4px;
-    display:block;
-  }
-  .exp-item ul{ margin:16px 0 0; padding-left:20px; }
-  .exp-item li{ margin-bottom:8px; font-size:0.96rem; }
-
   /* ---------- CONTACT ---------- */
   .contact-grid{
     display:grid;
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns:1.05fr 0.95fr;
     gap:48px;
     align-items:start;
   }
   .contact-grid h2{ font-size:2.2rem; max-width:480px; }
-  .contact-list{
-    list-style:none;
-    margin:0; padding:0;
-  }
-  .contact-list li{
-    padding:16px 0;
-    border-top:1px solid var(--line);
-    display:flex;
-    justify-content:space-between;
+  .contact-list{ display:grid; gap:12px; }
+  .contact-card{
+    position:relative;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:44px 1fr auto;
     align-items:center;
-    font-size:0.98rem;
+    gap:16px;
+    padding:14px 18px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    text-decoration:none;
+    color:var(--ink);
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    -webkit-tap-highlight-color:transparent;
   }
-  .contact-list li:last-child{ border-bottom:1px solid var(--line); }
-  .contact-list .k{
+  .contact-card:hover{
+    transform:translateX(4px);
+    border-color:var(--navy);
+    box-shadow:0 12px 24px -16px rgba(31,58,95,0.45);
+  }
+  .contact-card:active{ transform:scale(0.98); }
+  .ci{
+    width:44px; height:44px;
+    border-radius:10px;
+    display:grid;
+    place-items:center;
+    background:var(--tag-bg);
+    color:var(--navy);
+    transition:background .25s ease, color .25s ease;
+  }
+  .ci svg{ width:20px; height:20px; }
+  .contact-card:hover .ci{ background:var(--navy); color:var(--paper); }
+  .contact-card:hover .ci svg{ animation:wiggle .5s ease; }
+  @keyframes wiggle{
+    25%{ transform:rotate(-12deg); }
+    50%{ transform:rotate(10deg); }
+    75%{ transform:rotate(-5deg); }
+  }
+  .cc-k{
+    display:block;
     font-family:'IBM Plex Mono', monospace;
-    font-size:0.68rem;
+    font-size:0.62rem;
     text-transform:uppercase;
     letter-spacing:0.1em;
     color:var(--ink-soft);
   }
-  .contact-list a{ text-decoration:none; color:var(--ink); font-weight:500; }
+  .cc-v{ display:block; font-weight:500; font-size:0.98rem; word-break:break-word; }
+  .cc-arrow{ font-family:'IBM Plex Mono', monospace; color:var(--navy); transition:transform .25s ease; }
+  .contact-card:hover .cc-arrow{ transform:translate(3px,-3px); }
 
   footer{
     padding:28px 0 60px;
@@ -477,24 +728,127 @@
   }
 
   /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 920px){
+    :root{ --nav-h:60px; }
+    .nav-inner{ padding:10px 16px; }
+    .nav-inner .brand{ font-size:1.25rem; }
+    .nav-toggle{ display:inline-flex; }
+
+    /* links become a dropdown panel under the bar */
+    .nav-links{
+      position:absolute;
+      top:100%;
+      left:0; right:0;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      padding:16px 16px 20px;
+      background:var(--paper);
+      border-bottom:1px solid var(--line);
+      box-shadow:0 18px 30px -20px rgba(26,26,24,0.35);
+      opacity:0;
+      visibility:hidden;
+      transform:translateY(-10px);
+      transition:opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+    }
+    .site-nav.open .nav-links{
+      opacity:1;
+      visibility:visible;
+      transform:none;
+      transition:opacity .25s ease, transform .25s ease, visibility 0s;
+    }
+    .nav-links li{ opacity:0; transform:translateY(-6px); transition:opacity .3s ease, transform .3s ease; }
+    .site-nav.open .nav-links li{ opacity:1; transform:none; }
+    .site-nav.open .nav-links li:nth-child(2){ transition-delay:.04s; }
+    .site-nav.open .nav-links li:nth-child(3){ transition-delay:.08s; }
+    .site-nav.open .nav-links li:nth-child(4){ transition-delay:.12s; }
+    .site-nav.open .nav-links li:nth-child(5){ transition-delay:.16s; }
+    .site-nav.open .nav-links li:nth-child(6){ transition-delay:.2s; }
+    .nav-links a{ display:block; text-align:center; font-size:0.72rem; padding:14px 10px; }
+
+    .nav-backdrop{
+      display:block;
+      position:fixed;
+      inset:0;
+      z-index:40;
+      background:rgba(26,26,24,0.3);
+      opacity:0;
+      visibility:hidden;
+      transition:opacity .25s ease, visibility 0s linear .25s;
+    }
+    body.menu-open .nav-backdrop{ opacity:1; visibility:visible; transition:opacity .25s ease, visibility 0s; }
+  }
   @media (max-width: 800px){
-    .about-grid, .contact-grid{ grid-template-columns:1fr; gap:28px; }
-    .cs-cols{ grid-template-columns:1fr; gap:16px; }
+    .wrap{ padding:0 16px; }
+    .hero{ padding-top:36px; padding-bottom:56px; }
+    .hero-grid{ grid-template-columns:1fr; gap:36px; }
+    .about-visual{ max-width:440px; width:100%; margin:0 auto; }
+    .case-grid{ grid-template-columns:1fr; }
+    .case-card{ min-height:0; padding:50px 24px 28px; }
+    .projects-grid{ grid-template-columns:repeat(2, 1fr); gap:20px; }
     .skills-grid{ grid-template-columns:1fr; gap:28px; }
     .cert-grid{ grid-template-columns:1fr; }
-    .exp-item{ grid-template-columns:1fr; gap:8px; }
-    .hero-grid{ grid-template-columns:1fr; gap:20px; }
-    .hero-meta{ text-align:left; }
+    .contact-grid{ grid-template-columns:1fr; gap:28px; }
     section{ padding:56px 0; }
+
+    .tl-line{ left:11px; }
+    .tl-item{
+      grid-template-columns:24px 1fr;
+      grid-template-areas:"node when" "node body";
+    }
+    .tl-item .when{ text-align:left; padding:3px 0 4px 16px; }
+    .tl-node{ align-self:start; }
+    .tl-body{ padding-left:16px; }
   }
   @media (max-width: 640px){
-    .nav-links{ display:none; }
     body{ font-size:16px; }
+    .hero-cta{ gap:10px; }
+    .hero-cta .btn{ flex:1 1 auto; text-align:center; padding:13px 16px; }
+    .hero-cta .btn.primary{ flex-basis:100%; }
+    .case-card{ padding:48px 20px 24px; border-radius:14px; }
+    .case-card h3{ font-size:1.35rem; }
+    .case-foot{ flex-direction:column; align-items:flex-start; }
+    .projects-grid{ grid-template-columns:1fr; }
+    .playcard{ max-width:360px; width:100%; margin:0 auto; aspect-ratio:4/5; }
+    .section-title, .contact-grid h2{ font-size:1.8rem; }
+    .contact-card{ grid-template-columns:40px 1fr auto; gap:12px; padding:12px 14px; }
+    .ci{ width:40px; height:40px; }
+    .tl-body h3{ font-size:1.2rem; }
+  }
+  @media (max-width: 400px){
+    .chip > span{ font-size:0.52rem; padding:4px 8px; }
+    .av-core .then{ font-size:0.46rem; }
+    .code-line{ font-size:0.62rem; padding:7px 10px; }
+    .task{ font-size:0.58rem; }
+  }
+
+  /* touch screens: no sticky hover lifts, press feedback instead */
+  @media (hover: none){
+    .case-card:hover, .case-card:nth-child(even):hover, .playcard:hover{
+      transform:none;
+      border-color:var(--line);
+      box-shadow:0 2px 0 var(--line), 0 12px 28px -18px rgba(26,26,24,0.35);
+    }
+    .case-card:active, .playcard:active{ transform:scale(0.98); border-color:var(--navy); }
+    .btn:hover{ transform:none; box-shadow:none; }
+    .btn:active{ transform:scale(0.96); }
+    .contact-card:hover{ transform:none; box-shadow:none; border-color:var(--line); }
+    .contact-card:hover .ci{ background:var(--tag-bg); color:var(--navy); }
+    .contact-card:active{ transform:scale(0.98); border-color:var(--navy); }
+    .contact-card:active .ci{ background:var(--navy); color:var(--paper); }
+    .nav-links a:hover:not(.active){ color:var(--ink-soft); border-color:var(--line); transform:none; box-shadow:none; }
+    .nav-links a:hover:not(.active)::before{ transform:translateY(101%); }
+    .nav-links a:active{ transform:scale(0.93); }
   }
 
   @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior:auto; }
-    *{ transition:none !important; }
+    *, *::before, *::after{ transition:none !important; animation:none !important; }
+    .reveal{ opacity:1 !important; transform:none !important; }
+    .typed{ width:auto !important; }
+    .task{ color:var(--ink) !important; border:1px solid var(--navy) !important; }
+    .task .tick{ background:var(--navy) !important; color:var(--paper) !important; }
+    .tl-fill{ transform:scaleY(1) !important; }
   }
 </style>
 </head>
@@ -503,15 +857,20 @@
 <header class="site-nav">
   <div class="nav-inner">
     <a class="brand" href="#top">Utkarsh Pal</a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">
+      <span class="nt-label">Menu</span><span class="burger" aria-hidden="true"><i></i><i></i></span>
+    </button>
+    <ul class="nav-links" id="navMenu">
       <li><a href="#work">Case Studies</a></li>
-      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Assignments</a></li>
       <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#certifications">Certifications</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </div>
 </header>
+<div class="nav-backdrop" aria-hidden="true"></div>
 
 <div id="top"></div>
 
@@ -523,7 +882,6 @@
     </div>
     <div class="hero-grid">
       <div>
-        <!-- <p class="hero-name">Utkarsh Pal</p> -->
         <h1>Curious about<br><em>why</em>, before <em>what</em>.</h1>
         <p class="hero-sub">I'm Utkarsh Pal — an aspiring Product Manager with an engineering background. I'm drawn to how teams decide what to build, and why some products become part of people's everyday lives while others don't. This portfolio is a collection of self-directed product thinking, built to practice and demonstrate that curiosity.</p>
         <div class="hero-cta">
@@ -532,34 +890,39 @@
           <a class="btn" href="https://drive.google.com/file/d/13mZ1eUCHW08-X6TweyEPB3nTPrZgUgUw/view?usp=sharing" target="_blank" rel="noopener">View Resume ↗</a>
         </div>
       </div>
-      <!-- <div class="hero-meta mono">
-        Ghaziabad, India<br>
-        <a href="mailto:utkarsh.7268@gmail.com">utkarsh.7268@gmail.com</a><br>
-        <a href="tel:+919198991011">+91 91989 91011</a>
-      </div> -->
-    </div>
-  </div>
-  <hr class="hero-rule">
-</section>
 
-<!-- ================= ABOUT ================= -->
-<section id="about">
-  <div class="wrap">
-    <div class="eyebrow"><span class="num mono">01</span><span class="label">About</span></div>
-    <div class="about-grid">
-      <div>
-        <h2>User-obsessed.<br>Product curious.<br>Impact-focused.</h2>
-      </div>
-      <div class="about-copy">
-        <p>I'm an aspiring Product Manager with an engineering background, driven by curiosity and a desire to build products that people genuinely love to use. Since college, I've been fascinated by how startups turn ideas into products, how teams decide what to build, and why some products become part of people's everyday lives while others don't.</p>
-        <p>My background is in Electronics &amp; Communication Engineering, and I've spent the past year building structured product case studies — practicing problem framing, prioritization, and metrics definition on real platforms I use every day.</p>
-        <ul class="value-list">
-          <li><span class="arrow">→</span><span>I approach products with curiosity, always asking <strong>why</strong> before <strong>what</strong>.</span></li>
-          <li><span class="arrow">→</span><span>I break down user problems through research, case studies, and structured thinking.</span></li>
-          <li><span class="arrow">→</span><span>I validate ideas using market research, competitor analysis, and user-centric reasoning.</span></li>
-          <li><span class="arrow">→</span><span>I combine technical understanding with product thinking to collaborate effectively with engineering teams.</span></li>
-          <li><span class="arrow">→</span><span>I'm eager to learn, take ownership, and continuously improve through feedback.</span></li>
-        </ul>
+      <!--
+        ================= ABOUT VISUAL SLOT =================
+        This card explains the "About" part through animation.
+        To use your own image or animation instead, replace EVERYTHING inside <div class="av-stage">…</div> with e.g.:
+          <img src="about.png" alt="About Utkarsh">
+        or
+          <video src="about.mp4" autoplay muted loop playsinline></video>
+        The caption below the stage can stay or be edited.
+      -->
+      <div class="about-visual reveal" aria-label="About Utkarsh">
+        <div class="av-top"><span><span class="dot"></span>About me</span><span>How I think</span></div>
+        <div class="av-stage">
+          <div class="ring outer"></div>
+          <div class="ring inner"></div>
+
+          <div class="orbit">
+            <div class="chip" style="left:50%; top:20%;"><span>Research</span></div>
+            <div class="chip" style="left:76%; top:65%;"><span>Prioritize</span></div>
+            <div class="chip" style="left:24%; top:65%;"><span>Metrics</span></div>
+          </div>
+          <div class="orbit rev">
+            <div class="chip" style="left:86%; top:29%;"><span>Users</span></div>
+            <div class="chip" style="left:50%; top:92%;"><span>Engineering</span></div>
+            <div class="chip" style="left:14%; top:29%;"><span>Impact</span></div>
+          </div>
+
+          <div class="av-core"><span class="why">why?</span><span class="then">before what</span></div>
+        </div>
+        <div class="av-caption">
+          <p class="av-motto">User-obsessed. Product curious. Impact-focused.</p>
+          <p class="av-rotator"><span class="arrow">→</span><span id="avLine">I ask why before what.</span></p>
+        </div>
       </div>
     </div>
   </div>
@@ -568,215 +931,176 @@
 <!-- ================= CASE STUDIES ================= -->
 <section id="work">
   <div class="wrap">
-    <div class="eyebrow"><span class="num mono">02</span><span class="label">Case Studies</span></div>
-    <h2 style="font-size:2.2rem; max-width:600px; margin-bottom:8px;">Self-directed product thinking, worked through in the open.</h2>
-    <p style="color:var(--ink-soft); max-width:600px; margin-top:14px;">Each of these digs into a real product or evaluation problem in depth. The tags below say exactly what kind of work went into each one, so nothing here overclaims.</p>
+    <div class="eyebrow"><span class="num mono">01</span><span class="label">Case Studies</span></div>
+    <h2 class="section-title">Self-directed product thinking, worked through in the open.</h2>
+    <p class="section-lede">Each card opens the full write-up. The tags say exactly what kind of work went into each one, so nothing here overclaims.</p>
 
-    <!-- CASE STUDY 1 -->
-    <div class="cs-item">
-      <div class="cs-head">
-        <h3>LinkedIn AI Discovery — surfacing hiring posts the Jobs tab misses</h3>
-        <span class="cs-num mono">Case 01</span>
-      </div>
-      <p class="cs-hook">Recruiters often post openings straight to the feed — as text, images, or carousels — where LinkedIn's Jobs filters never see them.</p>
-      <div class="tags">
-        <span class="tag">Self-initiated</span>
-        <span class="tag">Personal + peer validation</span>
-        <span class="tag ochre">MoSCoW prioritization</span>
-        <span class="tag">No wireframes</span>
-      </div>
-      <div class="cs-cols">
-        <div class="col"><span class="k">Problem</span><p>Hiring posts shared informally on the feed don't appear in job search or recommendations, so active job seekers miss relevant opportunities despite filtering diligently.</p></div>
-        <div class="col"><span class="k">My Role</span><p>Solo, self-initiated — problem framing, solution design, prioritization, and metrics, with no brief or team.</p></div>
-        <div class="col"><span class="k">Outcome</span><p>A structural case study used to demonstrate product thinking — not built, shipped, or tested with real users.</p></div>
-      </div>
-
-      <details class="cs-more">
-        <summary>Read the full case study</summary>
-        <div class="cs-body">
-          <h4>Context</h4>
-          <p>I personally noticed I was missing hiring opportunities on LinkedIn that were shared as regular feed posts rather than proper Jobs listings, even while actively searching and filtering. Talking it through with 3–4 friends who were also job hunting confirmed it wasn't just me — they'd run into the same problem. This was informal peer validation, not a formal user research study.</p>
-
-          <h4>Problem</h4>
-          <ul>
-            <li>Not getting all opportunities through the Jobs feature.</li>
-            <li>Difficulty applying multiple filters while searching for jobs.</li>
-            <li>Manually scanning the feed for hiring posts shared as images or carousels.</li>
-            <li>Hiring information in these posts is unstructured — hard to quickly identify role, location, experience, application link, or deadline.</li>
-            <li>Users get generic recommendations instead of ones personalized to their skills, interests, and career goals.</li>
-          </ul>
-
-          <h4>Process</h4>
-          <p>Went straight to brainstorming solutions rather than first benchmarking competitors like Indeed or Naukri. Proposed four features: an <strong>AI Job Discovery tab</strong> aggregating AI-detected hiring content, a <strong>personalized feed</strong> using behavioral analytics, <strong>real-time notifications</strong> for high-match posts, and an <strong>AI match score</strong> against a user's profile.</p>
-          <p>Prioritized using MoSCoW, driven mainly by <strong>user impact</strong> — how many people would benefit — rather than technical effort:</p>
-          <ul>
-            <li><strong>Must have:</strong> AI Job Discovery tab (the MVP)</li>
-            <li><strong>Should have:</strong> Personalized feed; notification on the Jobs icon</li>
-            <li><strong>Could have:</strong> AI match score; AI resume suggestions</li>
-            <li><strong>Won't have (this release):</strong> AI interview prep; AI learning recommendations</li>
-          </ul>
-          <p>Defined six metrics: feed adoption rate, post click-through rate, application conversion rate, recommendation accuracy, time-to-discover, and CSAT/NPS.</p>
-
-          <h4>Outcome</h4>
-          <p>The case study itself is the deliverable — used to show product thinking to recruiters. It hasn't been shared externally for structured feedback yet.</p>
-
-          <h4>Learning</h4>
-          <p>Practiced translating a vague, personally-felt pain point into a structured problem statement, and got real practice weighing prioritization trade-offs using impact as the primary lens.</p>
-
-          <p class="cs-note">Honest gap: no competitor research or formal user interviews were conducted — a quick scan of how other job platforms handle unstructured hiring content would strengthen this further.</p>
+    <div class="case-grid">
+      <!-- 01 — AI EVAL -->
+      <a class="case-card reveal" href="https://www.notion.so/3b5724e42bdf80939688e68ba8e21e36?pvs=25" target="_blank" rel="noopener">
+        <span class="playcard-corner warm"><span class="idx">01</span><span class="suit">♦</span></span>
+        <span class="case-kicker">Case 01 · AI evaluation</span>
+        <h3>AI Text-to-Image Evaluation for India</h3>
+        <p class="case-hook">Is "visually good" the same as "advertisement-ready"?</p>
+        <p class="case-desc">A human-centered evaluation of three text-to-image models against a real festive ad brief for an Indian fashion brand — 9 participants, 7 criteria, one clear winner.</p>
+        <div class="case-foot">
+          <div class="tags">
+            <span class="tag">Human evaluation</span>
+            <span class="tag ochre">Cross-model</span>
+            <span class="tag">Quant + qual</span>
+          </div>
+          <span class="case-cta">Read on Notion <span class="ar">↗</span></span>
         </div>
-      </details>
-      <!--
-        NOTION LINK — CASE 01 (LinkedIn AI Discovery)
-        Replace the href="#" below with the URL of this specific page inside your Notion workspace
-        (open the page in Notion → Share → Copy link → make sure "Share to web" is ON, or it'll be blocked for visitors).
-      -->
-      <p class="notion-link mono"><a href="https://www.notion.so/394724e42bdf80ef8ea4d341d2a6c783?pvs=25" target="_blank" rel="noopener">View full write-up on Notion ↗</a></p>
+      </a>
+
+      <!-- 02 — LINKEDIN -->
+      <a class="case-card reveal" href="https://www.notion.so/394724e42bdf80ef8ea4d341d2a6c783?pvs=25" target="_blank" rel="noopener">
+        <span class="playcard-corner"><span class="idx">02</span><span class="suit">♠</span></span>
+        <span class="case-kicker">Case 02 · Product case study</span>
+        <h3>LinkedIn AI Discovery</h3>
+        <p class="case-hook">Surfacing hiring posts the Jobs tab misses.</p>
+        <p class="case-desc">Recruiters post openings straight to the feed, where Jobs filters never see them. Problem framing, MoSCoW prioritization and success metrics for an AI discovery tab.</p>
+        <div class="case-foot">
+          <div class="tags">
+            <span class="tag">Self-initiated</span>
+            <span class="tag ochre">MoSCoW</span>
+            <span class="tag">Metrics</span>
+          </div>
+          <span class="case-cta">Read on Notion <span class="ar">↗</span></span>
+        </div>
+      </a>
+
+      <!-- 03 — INSTAGRAM -->
+      <a class="case-card reveal" href="https://www.notion.so/395724e42bdf8014a7c2f1f1b4e565fa?pvs=25" target="_blank" rel="noopener">
+        <span class="playcard-corner warm"><span class="idx">03</span><span class="suit">♥</span></span>
+        <span class="case-kicker">Case 03 · Product case study</span>
+        <h3>Instagram SafeConnect</h3>
+        <p class="case-hook">Making the first message feel less like a leap of faith.</p>
+        <p class="case-desc">Trust and safety features for connecting with strangers — research-backed sub-problems, two personas, KPIs and a phased roadmap.</p>
+        <div class="case-foot">
+          <div class="tags">
+            <span class="tag">Secondary research</span>
+            <span class="tag ochre">Personas</span>
+            <span class="tag">Roadmap</span>
+          </div>
+          <span class="case-cta">Read on Notion <span class="ar">↗</span></span>
+        </div>
+      </a>
+
+      <!-- 04 — VOICE AI -->
+      <a class="case-card reveal" href="https://docs.google.com/document/d/1psPsoAjvL8bXnXX0rNoWgdYR4bCgHYN_a0uXsFgwiE4/edit?tab=t.0" target="_blank" rel="noopener">
+        <span class="playcard-corner"><span class="idx">04</span><span class="suit">♣</span></span>
+        <span class="case-kicker">Case 04 · Market research</span>
+        <h3>Voice AI Market Research</h3>
+        <p class="case-hook">Mapping the market before proposing a product.</p>
+        <p class="case-desc">A desk study of Voice AI market size, competitors and adoption barriers — pointing to multilingual, privacy-first and industry-specific opportunities.</p>
+        <div class="case-foot">
+          <div class="tags">
+            <span class="tag ochre">Market research</span>
+            <span class="tag">Desk study</span>
+          </div>
+          <span class="case-cta">Read on Google Docs <span class="ar">↗</span></span>
+        </div>
+      </a>
     </div>
+  </div>
+</section>
 
-    <!-- CASE STUDY 2 -->
-    <div class="cs-item">
-      <div class="cs-head">
-        <h3>Instagram SafeConnect — making the first message feel less like a leap of faith</h3>
-        <span class="cs-num mono">Case 02</span>
-      </div>
-      <p class="cs-hook">Instagram makes it easy to discover people, but difficult to trust and confidently connect with strangers.</p>
-      <div class="tags">
-        <span class="tag">Self-initiated</span>
-        <span class="tag">Secondary research</span>
-        <span class="tag ochre">Persona-based</span>
-        <span class="tag">Structural / no wireframes</span>
-      </div>
-      <div class="cs-cols">
-        <div class="col"><span class="k">Problem</span><p>Fake accounts, privacy worries, fear of rejection, and social anxiety all discourage users from engaging with people they don't already know.</p></div>
-        <div class="col"><span class="k">My Role</span><p>Solo, self-initiated — research synthesis, feature design, persona mapping, KPI definition, and roadmap.</p></div>
-        <div class="col"><span class="k">Outcome</span><p>A portfolio case study demonstrating problem framing and feature design — not validated with real users.</p></div>
-      </div>
+<!-- ================= SELECTED ASSIGNMENTS ================= -->
+<section id="projects">
+  <div class="wrap wide">
+    <div class="eyebrow"><span class="num mono">02</span><span class="label">Selected Assignments</span></div>
+    <h2 class="section-title" style="font-size:2rem;">Assignments for companies I'm in the running with.</h2>
+    <p class="section-lede" style="margin-bottom:40px;">Shorter, sharper deliverables done for specific evaluation/interview rounds — not full case studies, but real structured work.</p>
 
-      <details class="cs-more">
-        <summary>Read the full case study</summary>
-        <div class="cs-body">
-          <h4>Context</h4>
-          <p>This project came from a personal experience — running into a fake account or spam DM on Instagram — which made the trust and safety gap feel real rather than abstract.</p>
-
-          <h4>Problem</h4>
-          <p>Six sub-problems were identified through secondary research rather than primary interviews: fake accounts and bots (Facebook removed 1.3B fake accounts in 2020), privacy concerns (70%+ of users worry about data security, per Pew), fear of judgment or rejection, social anxiety linked to influencer browsing, fear of negative feedback (55% of users have faced trolling or harassment, per The Atlantic Council), and engagement-driven algorithms that deprioritize authentic interaction (per Harvard Business Review, 2021).</p>
-
-          <h4>Process</h4>
-          <p>Designed <strong>SafeConnect</strong> — a feature combining lightweight verification, shared-interest matching, privacy-controlled introduction requests, icebreaker prompts, AI-based safety filtering, and a re-weighted Explore feed. Mapped these features against two personas: Anjali (fears rejection/judgment) and Yash (social anxiety, privacy concerns). Defined KPIs across engagement, community-building, safety/trust, and satisfaction, and outlined a five-phase roadmap from research &amp; validation through to continuous improvement — the first phase of which proposes real user interviews as a <em>next step</em>, not something already completed.</p>
-
-          <h4>Outcome</h4>
-          <p>The case study itself is the deliverable, used to demonstrate product thinking. It hasn't been built, shipped, or tested with real users.</p>
-
-          <h4>Learning</h4>
-          <p>Practiced breaking a personally-felt problem into named, research-backed sub-problems, then translating that into a feature set with personas and metrics attached.</p>
-
-          <p class="cs-note">Honest gap: no formal prioritization (like impact-vs-effort scoring) was applied across the seven proposed features, and no wireframes were built — worth adding if this case study is revisited.</p>
+    <div class="projects-grid">
+      <!-- PLACEHOLDER — ACCREDIAN: replace title, description and href -->
+      <div class="playcard reveal">
+        <span class="playcard-corner warm"><span class="idx">01</span><span class="suit">♦</span></span>
+        <div class="playcard-body">
+          <div class="playcard-mark">◆</div>
+          <div class="playcard-company">Accredian</div>
+          <div class="playcard-title">Learning Product Research</div>
+          <p class="playcard-desc">Product research and content strategy for learning products.</p>
+          <a class="playcard-link" href="https://docs.google.com/document/d/1A77eRFldjsw7gq4gvbkx-7x7yQV7FwVz-ZCuKc0T9Wc/edit?usp=sharing" target="_blank" rel="noopener">View ↗</a>
         </div>
-      </details>
-      <!--
-        NOTION LINK — CASE 02 (Instagram SafeConnect)
-        Replace href="#" with this page's real Notion URL (Share → Copy link, with "Share to web" enabled).
-      -->
-      <p class="notion-link mono"><a href="https://www.notion.so/395724e42bdf8014a7c2f1f1b4e565fa?pvs=25" target="_blank" rel="noopener">View full write-up on Notion ↗</a></p>
+        <span class="playcard-corner warm bottom"><span class="idx">01</span><span class="suit">♦</span></span>
+      </div>
+
+      <!-- PLACEHOLDER — MAXIMONEY -->
+      <div class="playcard reveal">
+        <span class="playcard-corner"><span class="idx">02</span><span class="suit">♠</span></span>
+        <div class="playcard-body">
+          <div class="playcard-mark">◆</div>
+          <div class="playcard-company">Maximoney</div>
+          <div class="playcard-title">Product Teardown & Recommendations</div>
+          <p class="playcard-desc">Loan optimization evaluation to reduce EMIs and interest costs.</p>
+          <a class="playcard-link" href="https://docs.google.com/document/d/1E70emqbNgpk5JjKQ4hUf0FKVjRQuUTxmx-OnICtBHRc/edit?usp=sharing " target="_blank" rel="noopener">View ↗</a>
+        </div>
+        <span class="playcard-corner bottom"><span class="idx">02</span><span class="suit">♠</span></span>
+      </div>
+
+      <!-- PLACEHOLDER — NPREP -->
+      <div class="playcard reveal">
+        <span class="playcard-corner"><span class="idx">03</span><span class="suit">♣</span></span>
+        <div class="playcard-body">
+          <div class="playcard-mark">◆</div>
+          <div class="playcard-company">NPrep</div>
+          <div class="playcard-title">Designing a 3-Day Engagement Loop</div>
+          <p class="playcard-desc">3-day classroom challenge to improve student engagement.</p>
+          <a class="playcard-link" href="https://docs.google.com/document/d/1Pwav9jj2uo9jTfMm9q7wd6cH1xIkGqMovv_KHZdl75I/edit?usp=sharing" target="_blank" rel="noopener">View ↗</a>
+        </div>
+        <span class="playcard-corner bottom"><span class="idx">03</span><span class="suit">♣</span></span>
+      </div>
     </div>
+  </div>
+</section>
 
-    <!-- CASE STUDY 3 -->
-    <div class="cs-item">
-      <div class="cs-head">
-        <h3>Voice AI — mapping the market before proposing a product</h3>
-        <span class="cs-num mono">Case 03</span>
-      </div>
-      <p class="cs-hook">Before designing anything, I wanted to understand where Voice AI's biggest opportunities and constraints actually are.</p>
-      <div class="tags">
-        <span class="tag ochre">Market research</span>
-        <span class="tag">Desk study</span>
-        <span class="tag">Not a shipped product</span>
-      </div>
-      <div class="cs-cols">
-        <div class="col"><span class="k">Focus</span><p>Market sizing, competitive landscape, and adoption challenges across the Voice AI ecosystem.</p></div>
-        <div class="col"><span class="k">Method</span><p>Secondary research compiled into a structured market study — not a product case study.</p></div>
-        <div class="col"><span class="k">Output</span><p>A report identifying opportunity areas: multilingual, privacy-focused, and industry-specific Voice AI.</p></div>
-      </div>
+<!-- ================= EXPERIENCE ================= -->
+<section id="experience">
+  <div class="wrap">
+    <div class="eyebrow"><span class="num mono">03</span><span class="label">Experience</span></div>
 
-      <details class="cs-more">
-        <summary>Read the full research summary</summary>
-        <div class="cs-body">
-          <h4>Why this is labeled "Market Research," not a case study</h4>
-          <p>Unlike the other two entries, this project has no user problem I identified, no product I designed, and no MVP or prioritization decisions — it's an industry study. It's included here because it shows research and analytical range, but it's framed honestly as its own format rather than forced into a case-study shape.</p>
+    <div class="timeline">
+      <div class="tl-line"><span class="tl-fill"></span></div>
 
-          <h4>Key findings</h4>
+      <!-- FORAGE — fill in the date, company name and bullets -->
+      <div class="tl-item reveal">
+        <div class="when">[Sep 2026]</div>
+        <span class="tl-node"></span>
+        <div class="tl-body">
+          <h3>Forage <span class="tag ochre">Job simulation</span></h3>
+          <span class="role">Product Management Job Simulation</span>
           <ul>
-            <li>The Voice AI market is projected to grow from $20.25B (2023) to $50B (2030) at a 22.3% CAGR.</li>
-            <li>Consumer use spans smart assistants, smart homes, and voice commerce (projected at $164B by 2025); enterprise use spans customer support, healthcare, banking, and retail.</li>
-            <li>Core challenges: transcription accuracy (85–95%, varying with noise), privacy concerns (79% of consumers worry about surveillance), and high development costs ($500K–$5M).</li>
-            <li>Market leaders: Amazon Alexa (69% smart speaker share), Google Assistant (25%), plus Apple Siri, Microsoft Cortana, IBM Watson, and SoundHound.</li>
-            <li>Opportunity areas: industry-specific Voice AI (healthcare CAGR of 26.7%), multilingual/accent-adaptive AI, and privacy-focused on-device processing (growing 28% YoY).</li>
+            <li class="placeholder">Connect KPIs to specific business questions</li>
+            <li class="placeholder">Prioritize information for a stakeholder audience</li>
+            <li class="placeholder">Break a complex project into manageable steps</li>
+	    <li class="placeholder">Plan cross-functional contributions, dependencies, and review points</li>
           </ul>
+          <div class="sim-tasks" aria-hidden="true">
+            <span class="task"><i class="tick">✓</i>Research</span>
+            <span class="task"><i class="tick">✓</i>Prioritize</span>
+            <span class="task"><i class="tick">✓</i>Define metrics</span>
+            <span class="task"><i class="tick">✓</i>Present</span>
+          </div>
         </div>
-      </details>
-      <!--
-        NOTION LINK — CASE 03 (Voice AI Market Research)
-        Replace href="#" with this page's real Notion URL (Share → Copy link, with "Share to web" enabled).
-      -->
-      <p class="notion-link mono"><a href="https://docs.google.com/document/d/1psPsoAjvL8bXnXX0rNoWgdYR4bCgHYN_a0uXsFgwiE4/edit?tab=t.0" target="_blank" rel="noopener">View full WRITE-UP ↗</a></p>
-    </div>
-
-    <!-- CASE STUDY 4 -->
-    <div class="cs-item">
-      <div class="cs-head">
-        <h3>AI Text-to-Image Evaluation for India — is "visually good" the same as "advertisement-ready"?</h3>
-        <span class="cs-num mono">Case 04</span>
-      </div>
-      <p class="cs-hook">A human-centered evaluation of three text-to-image models, tested against a real advertising use case for an Indian fashion brand.</p>
-      <div class="tags">
-        <span class="tag">Human evaluation</span>
-        <span class="tag">9 participants</span>
-        <span class="tag ochre">Cross-model comparison</span>
-        <span class="tag">Quant + qualitative</span>
-      </div>
-      <div class="cs-cols">
-        <div class="col"><span class="k">Problem</span><p>Generic image-generation benchmarks measure visual quality, but not whether an output is actually usable for a specific market like India.</p></div>
-        <div class="col"><span class="k">My Role</span><p>Owned the evaluation end-to-end — use case, prompt design, human evaluation design, data collection, analysis, and product implications.</p></div>
-        <div class="col"><span class="k">Outcome</span><p>A clear preference result (Gemini 3.1 Flash Lite chosen by 7/9 participants) plus a product-level insight about what "quality" means for this market.</p></div>
       </div>
 
-      <details class="cs-more">
-        <summary>Read the full case study</summary>
-        <div class="cs-body">
-          <h4>Overview</h4>
-          <p>I designed and ran a human-centered evaluation of three text-to-image models — Google Gemini 3.1 Flash Lite Image, Ideogram 3.0, and FLUX.1 Schnell — to understand how well each could generate advertising creatives for an Indian fashion brand. Rather than judging image quality in isolation, I tested all three against one real use case: a festive digital advertisement for an Indian ethnic clothing brand.</p>
-
-          <h4>Problem</h4>
-          <p>Generic text-to-image benchmarks focus on image quality, realism, or technical capability — but those metrics don't capture whether an output is actually useful for a specific market. For Indian fashion brands, an advertisement needs to follow the creative brief while accurately representing Indian people, lifestyle, cultural context, and marketing information. The question this evaluation set out to answer: can AI-generated images move beyond "visually good" to become usable advertising creatives for Indian audiences?</p>
-
-          <h4>Why It Matters for India</h4>
-          <p>India is a highly diverse market — festivals, clothing, aesthetics, languages, and consumer preferences vary widely by region. A generic globally-trained image can look visually polished while still feeling inauthentic to an Indian audience. AI-generated advertising only delivers real value to businesses if the output is actually usable for the local market, not just technically impressive.</p>
-
-          <h4>Methodology</h4>
-          <p>The same prompt was used across all three models — a premium festive campaign image for a fictional brand, "Sanskriti Fashion," specifying an Indian woman in a maroon embroidered kurta set, a Diwali-decorated setting with diyas and rangoli, a 10% festive discount callout, and commercial photography quality. Outputs were anonymized as Image A, B, and C so participants couldn't be influenced by which model made which image.</p>
-          <p>9 participants rated each image independently on a 5-point scale across 7 criteria: prompt adherence, image realism, Indian representation, advertisement readiness, background realism, Indian lifestyle reflection, and text/spelling accuracy — then picked one overall preference.</p>
-
-          <h4>Results</h4>
+      <!-- INFOSYS -->
+      <div class="tl-item reveal">
+        <div class="when">Nov 2025 —<br>May 2026</div>
+        <span class="tl-node"></span>
+        <div class="tl-body">
+          <h3>Infosys</h3>
+          <span class="role">System Engineer Trainee</span>
           <ul>
-            <li><strong>Image A — Gemini 3.1 Flash Lite:</strong> chosen by 7/9 participants (77.8%)</li>
-            <li><strong>Image B — Ideogram 3.0:</strong> chosen by 2/9 participants (22.2%)</li>
-            <li><strong>Image C — FLUX.1 Schnell:</strong> chosen by 0/9 participants (0%)</li>
+            <li>Built hands-on projects and coding assignments using Java, Python, and SQL as part of the training curriculum.</li>
+            <li>Gained practical understanding of the Software Development Life Cycle (SDLC), Agile methodology, and version control best practices.</li>
+            <li>Sharpened analytical and problem-solving skills by working through programming challenges and simulated development projects.</li>
           </ul>
-          <p>Image A scored 4.44/5 on realism, but scored even higher — 4.67/5 — on advertisement readiness. I'd initially expected the most realistic image to win outright; instead, participant feedback showed that premium aesthetics, visual appeal, and commercial usefulness mattered just as much as realism itself.</p>
-
-          <h4>Key Takeaway</h4>
-          <p>AI evaluation is a product problem, not just a model-quality problem. This project taught me to evaluate AI outputs against the actual user job-to-be-done, combine quantitative ratings with human judgment, and translate those findings into product decisions. For Indian users, building useful AI products also means evaluating local context, cultural relevance, and real-world usability — not just generic technical quality.</p>
-
-          <p class="cs-note">Supporting material (Figma mockup, response sheet, generated images) available on request.</p>
+          <div class="code-line" aria-hidden="true"><span class="prompt">$</span><span class="typed">javac Training.java &amp;&amp; java Training</span><span class="caret"></span></div>
         </div>
-      </details>
-      <!--
-        NOTION LINK — CASE 04 (AI Text-to-Image Evaluation for India)
-        Replace href="#" with this page's real Notion URL (Share → Copy link, with "Share to web" enabled).
-        This is also where you could link the response sheet / generated images / Figma mockup mentioned in the write-up.
-      -->
-      <p class="notion-link mono"><a href="https://www.notion.so/3b5724e42bdf80939688e68ba8e21e36?pvs=25" target="_blank" rel="noopener">View full write-up on Notion ↗</a></p>
+      </div>
     </div>
   </div>
 </section>
@@ -784,9 +1108,9 @@
 <!-- ================= SKILLS ================= -->
 <section id="skills">
   <div class="wrap">
-    <div class="eyebrow"><span class="num mono">03</span><span class="label">Skills</span></div>
+    <div class="eyebrow"><span class="num mono">04</span><span class="label">Skills</span></div>
     <div class="skills-grid">
-      <div class="skill-block">
+      <div class="skill-block reveal">
         <span class="k">Product</span>
         <ul>
           <li>PRD Writing</li>
@@ -796,7 +1120,7 @@
           <li>Market Research</li>
         </ul>
       </div>
-      <div class="skill-block">
+      <div class="skill-block reveal">
         <span class="k">Tools</span>
         <ul>
           <li>Jira</li>
@@ -806,7 +1130,7 @@
           <li>Google Docs</li>
         </ul>
       </div>
-      <div class="skill-block">
+      <div class="skill-block reveal">
         <span class="k">Technical</span>
         <ul>
           <li>SQL</li>
@@ -817,66 +1141,45 @@
         </ul>
       </div>
     </div>
-
-    <div class="certs">
-      <span class="k">Certifications</span>
-      <!--
-        CERTIFICATION LINKS — for each certificate below, replace href="#" with the real
-        credential URL (e.g. the "View Certificate" link from Product School / Great Learning /
-        Simplilearn / Pendo.io). Leave target="_blank" so it opens in a new tab.
-      -->
-      <div class="cert-grid">
-        <div class="cert-item">
-          <div class="name">Product Discovery Micro-Certification
-            <a class="cert-link" href="https://drive.google.com/file/d/1oQLtyZ897MDwVC_9mgoJ2exNRRz_9ZNj/view" target="_blank" rel="noopener" aria-label="View credential: Product Discovery Micro-Certification">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-            </a>
-          </div>
-          <div class="issuer mono">Product School</div>
-        </div>
-        <div class="cert-item">
-          <div class="name">Product Strategy
-            <a class="cert-link" href="https://www.mygreatlearning.com/certificate/PXXGWFWQ" target="_blank" rel="noopener" aria-label="View credential: Product Strategy">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-            </a>
-          </div>
-          <div class="issuer mono">Great Learning</div>
-        </div>
-        <div class="cert-item">
-          <div class="name">Product Management
-            <a class="cert-link" href="https://drive.google.com/file/d/1vLBITI1rfXQ2FhXApZjtdMzxHl5_ex3V/view?usp=sharing" target="_blank" rel="noopener" aria-label="View credential: Product Management">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-            </a>
-          </div>
-          <div class="issuer mono">Simplilearn</div>
-        </div>
-        <div class="cert-item">
-          <div class="name">AI for Product Management
-            <a class="cert-link" href="https://www.credly.com/badges/4fc3ec4e-874f-4ef1-a216-d7f05ec18dd5/public_url" target="_blank" rel="noopener" aria-label="View credential: AI for Product Management">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-            </a>
-          </div>
-          <div class="issuer mono">Pendo.io</div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- ================= EXPERIENCE ================= -->
-<section id="experience">
+<!-- ================= CERTIFICATIONS ================= -->
+<section id="certifications">
   <div class="wrap">
-    <div class="eyebrow"><span class="num mono">04</span><span class="label">Experience</span></div>
-    <div class="exp-item">
-      <div class="when mono">Nov 2025 —<br>May 2026</div>
-      <div>
-        <h3>Infosys</h3>
-        <span class="role">System Engineer Trainee</span>
-        <ul>
-          <li>Built hands-on projects and coding assignments using Java, Python, and SQL as part of the training curriculum.</li>
-          <li>Gained practical understanding of the Software Development Life Cycle (SDLC), Agile methodology, and version control best practices.</li>
-          <li>Sharpened analytical and problem-solving skills by working through programming challenges and simulated development projects.</li>
-        </ul>
+    <div class="eyebrow"><span class="num mono">05</span><span class="label">Certifications</span></div>
+    <div class="cert-grid">
+      <div class="cert-item reveal">
+        <div class="name">Product Discovery Micro-Certification
+          <a class="cert-link" href="https://drive.google.com/file/d/1oQLtyZ897MDwVC_9mgoJ2exNRRz_9ZNj/view" target="_blank" rel="noopener" aria-label="View credential: Product Discovery Micro-Certification">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </a>
+        </div>
+        <div class="issuer mono">Product School</div>
+      </div>
+      <div class="cert-item reveal">
+        <div class="name">Product Strategy
+          <a class="cert-link" href="https://www.mygreatlearning.com/certificate/PXXGWFWQ" target="_blank" rel="noopener" aria-label="View credential: Product Strategy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </a>
+        </div>
+        <div class="issuer mono">Great Learning</div>
+      </div>
+      <div class="cert-item reveal">
+        <div class="name">Product Management
+          <a class="cert-link" href="https://drive.google.com/file/d/1vLBITI1rfXQ2FhXApZjtdMzxHl5_ex3V/view?usp=sharing" target="_blank" rel="noopener" aria-label="View credential: Product Management">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </a>
+        </div>
+        <div class="issuer mono">Simplilearn</div>
+      </div>
+      <div class="cert-item reveal">
+        <div class="name">AI for Product Management
+          <a class="cert-link" href="https://www.credly.com/badges/4fc3ec4e-874f-4ef1-a216-d7f05ec18dd5/public_url" target="_blank" rel="noopener" aria-label="View credential: AI for Product Management">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </a>
+        </div>
+        <div class="issuer mono">Pendo.io</div>
       </div>
     </div>
   </div>
@@ -885,18 +1188,29 @@
 <!-- ================= CONTACT ================= -->
 <section id="contact">
   <div class="wrap">
-    <div class="eyebrow"><span class="num mono">05</span><span class="label">Contact</span></div>
-    <div class="contact-grid">
+    <div class="eyebrow"><span class="num mono">06</span><span class="label">Contact</span></div>
+    <div class="contact-grid reveal">
       <div>
         <h2>Let's talk about products worth building.</h2>
         <p style="color:var(--ink-soft); margin-top:16px; max-width:420px;">Open to Associate PM and Product Manager roles, and always happy to talk through product thinking, feedback, or opportunities.</p>
       </div>
-      <ul class="contact-list">
-        <li><span class="k">Email</span><a href="mailto:utkarsh.7268@gmail.com">utkarsh.7268@gmail.com</a></li>
-        <li><span class="k">Phone</span><a href="tel:+919198991011">+91 91989 91011</a></li>
-        <!-- <li><span class="k">Location</span><span>Ghaziabad, India</span></li> -->
-         <li><span class="k">LinkedIn</span><a href="https://www.linkedin.com/in/utkarsh-pal-1ab358227/" target="_blank" rel="noopener">linkedin.com ↗</a></li>
-      </ul>
+      <div class="contact-list">
+        <a class="contact-card" href="https://www.linkedin.com/in/utkarsh-pal-1ab358227/" target="_blank" rel="noopener">
+          <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span>
+          <span><span class="cc-k">LinkedIn</span><span class="cc-v">Utkarsh Pal</span></span>
+          <span class="cc-arrow">↗</span>
+        </a>
+        <a class="contact-card" href="mailto:utkarsh.7268@gmail.com">
+          <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+          <span><span class="cc-k">Email</span><span class="cc-v">utkarsh.7268@gmail.com</span></span>
+          <span class="cc-arrow">↗</span>
+        </a>
+        <a class="contact-card" href="tel:+919198991011">
+          <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+          <span><span class="cc-k">Phone</span><span class="cc-v">+91 91989 91011</span></span>
+          <span class="cc-arrow">↗</span>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -905,5 +1219,127 @@
   © 2026 Utkarsh Pal — built with care, honesty, and a lot of "why before what."
 </footer>
 
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Scroll reveal */
+  var revealEls = document.querySelectorAll('.reveal');
+  if(reduce || !('IntersectionObserver' in window)){
+    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.12, rootMargin:'0px 0px -40px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+
+  /* Touch / click ripple */
+  if(!reduce){
+    document.querySelectorAll('.nav-links a, .btn, .contact-card').forEach(function(el){
+      el.addEventListener('pointerdown', function(e){
+        var r = el.getBoundingClientRect();
+        var s = Math.max(r.width, r.height) * 2;
+        var sp = document.createElement('span');
+        sp.className = 'ripple';
+        sp.style.width = sp.style.height = s + 'px';
+        sp.style.left = (e.clientX - r.left - s/2) + 'px';
+        sp.style.top = (e.clientY - r.top - s/2) + 'px';
+        el.appendChild(sp);
+        setTimeout(function(){ sp.remove(); }, 650);
+      });
+    });
+  }
+
+  /* Fixed header: keep page content below it */
+  var hdr = document.querySelector('.site-nav');
+  function setHeaderH(){ document.documentElement.style.setProperty('--header-h', hdr.offsetHeight + 'px'); }
+  setHeaderH();
+  window.addEventListener('resize', setHeaderH);
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(setHeaderH); }
+
+  /* Mobile menu */
+  var header = document.querySelector('.site-nav');
+  var toggle = document.querySelector('.nav-toggle');
+  var label = toggle.querySelector('.nt-label');
+  var backdrop = document.querySelector('.nav-backdrop');
+  function setMenu(open){
+    header.classList.toggle('open', open);
+    document.body.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    label.textContent = open ? 'Close' : 'Menu';
+  }
+  toggle.addEventListener('click', function(){ setMenu(!header.classList.contains('open')); });
+  backdrop.addEventListener('click', function(){ setMenu(false); });
+  document.querySelectorAll('.nav-links a, .brand').forEach(function(a){
+    a.addEventListener('click', function(){ setMenu(false); });
+  });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') setMenu(false); });
+  window.matchMedia('(min-width: 921px)').addEventListener('change', function(e){ if(e.matches) setMenu(false); });
+
+  /* Highlight the nav button for the section in view */
+  var links = {};
+  document.querySelectorAll('.nav-links a').forEach(function(a){
+    links[a.getAttribute('href').slice(1)] = a;
+  });
+  if('IntersectionObserver' in window){
+    var navIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting) return;
+        var link = links[entry.target.id];
+        Object.keys(links).forEach(function(k){ links[k].classList.remove('active'); });
+        if(link){ link.classList.add('active'); }
+      });
+    }, { rootMargin:'-45% 0px -50% 0px' });
+    document.querySelectorAll('section[id]').forEach(function(s){ navIO.observe(s); });
+  }
+
+  /* About card — rotating lines */
+  var lines = [
+    'I ask why before what.',
+    'I break user problems down with research and structured thinking.',
+    'I validate ideas with market research and competitor analysis.',
+    'I speak both product and engineering.',
+    'I take ownership and learn from feedback.'
+  ];
+  var lineEl = document.getElementById('avLine');
+  var li = 0;
+  if(!reduce && lineEl){
+    setInterval(function(){
+      lineEl.classList.add('out');
+      setTimeout(function(){
+        li = (li + 1) % lines.length;
+        lineEl.textContent = lines[li];
+        lineEl.classList.remove('out');
+      }, 400);
+    }, 3200);
+  }
+
+  /* Experience — timeline line fills as you scroll */
+  var tl = document.querySelector('.timeline');
+  var fill = document.querySelector('.tl-fill');
+  if(tl && fill && !reduce){
+    var ticking = false;
+    var update = function(){
+      var r = tl.getBoundingClientRect();
+      var p = (window.innerHeight * 0.65 - r.top) / r.height;
+      p = Math.max(0, Math.min(1, p));
+      fill.style.transform = 'scaleY(' + p + ')';
+      ticking = false;
+    };
+    window.addEventListener('scroll', function(){
+      if(!ticking){ ticking = true; requestAnimationFrame(update); }
+    }, { passive:true });
+    window.addEventListener('resize', update);
+    update();
+  }
+})();
+</script>
 </body>
 </html>
