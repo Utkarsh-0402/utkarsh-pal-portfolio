@@ -2,29 +2,31 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Utkarsh Pal — Product Management Portfolio</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
   :root{
-    --paper: #f5f3ee;
-    --paper-2: #eeece4;
-    --card: #fffdf8;
-    --ink: #1a1a18;
-    --ink-soft: #6b6862;
-    --line: #d8d4c8;
-    --navy: #1f3a5f;
-    --navy-deep: #14263f;
-    --ochre: #b3811f;
-    --ochre-soft: #f1e6cf;
-    --tag-bg: #eae6d9;
+    --paper: #f7f6f1;
+    --paper-2: #edeae1;
+    --card: #ffffff;
+    --ink: #16191d;
+    --ink-soft: #5a5e63;
+    --line: #ddd9cd;
+    --navy: #1d3557;
+    --navy-deep: #11223b;
+    --ochre: #a8791f;
+    --ochre-soft: #f2e6c9;
+    --tag-bg: #ece8dc;
+    --tint-navy: #eef1f5;
+    --tint-ochre: #f8efdb;
     --max: 980px;
     --nav-h: 84px;
   }
 
   *{ box-sizing:border-box; }
-  html{ scroll-behavior:smooth; overflow-x:hidden; }
+  html{ scroll-behavior:smooth; overflow-x:hidden; scroll-padding-top:env(safe-area-inset-top, 0px); }
 
   body{
     margin:0;
@@ -36,6 +38,7 @@
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
     padding-top:var(--header-h, 61px);
+    padding-bottom:env(safe-area-inset-bottom, 0px);
   }
   body.menu-open{ overflow:hidden; touch-action:none; }
 
@@ -60,10 +63,11 @@
     left:0;
     right:0;
     z-index:50;
-    background:rgba(245,243,238,0.96);
+    background:rgba(247,246,241,0.96);
     backdrop-filter:blur(6px);
     -webkit-backdrop-filter:blur(6px);
     border-bottom:1px solid var(--line);
+    padding-top:env(safe-area-inset-top, 0px);
   }
   .nav-inner{
     max-width:1120px;
@@ -141,7 +145,7 @@
     border:1px solid var(--line);
     border-radius:999px;
     padding:9px 14px;
-    min-height:40px;
+    min-height:44px;
     cursor:pointer;
     -webkit-tap-highlight-color:transparent;
     transition:background .25s ease, color .25s ease, border-color .25s ease, transform .15s ease;
@@ -649,6 +653,11 @@
   .skill-block ul{ list-style:none; margin:0; padding:0; }
   .skill-block li{ padding:7px 0; font-size:0.95rem; border-bottom:1px dotted var(--line); }
   .skill-block li:last-child{ border-bottom:none; }
+  /* Desktop default: accordion markup stays fully open and non-interactive */
+  summary.skill-btn{ cursor:default; pointer-events:none; list-style:none; }
+  summary.skill-btn::-webkit-details-marker{ display:none; }
+  summary.skill-btn::marker{ content:""; }
+  details.skill-acc > ul{ display:block; }
 
   /* ---------- CERTIFICATIONS ---------- */
   .cert-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:18px 32px; }
@@ -742,14 +751,16 @@
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:10px;
-      padding:16px 16px 20px;
+      padding:16px 16px calc(20px + env(safe-area-inset-bottom, 0px));
       background:var(--paper);
       border-bottom:1px solid var(--line);
-      box-shadow:0 18px 30px -20px rgba(26,26,24,0.35);
+      box-shadow:0 18px 30px -20px rgba(22,25,29,0.35);
       opacity:0;
       visibility:hidden;
       transform:translateY(-10px);
       transition:opacity .25s ease, transform .25s ease, visibility 0s linear .25s;
+      max-height:calc(100vh - var(--header-h, 60px) - env(safe-area-inset-top, 0px));
+      overflow-y:auto;
     }
     .site-nav.open .nav-links{
       opacity:1;
@@ -783,11 +794,7 @@
     .hero{ padding-top:36px; padding-bottom:56px; }
     .hero-grid{ grid-template-columns:1fr; gap:36px; }
     .about-visual{ max-width:440px; width:100%; margin:0 auto; }
-    .case-grid{ grid-template-columns:1fr; }
-    .case-card{ min-height:0; padding:50px 24px 28px; }
-    .projects-grid{ grid-template-columns:repeat(2, 1fr); gap:20px; }
-    .skills-grid{ grid-template-columns:1fr; gap:28px; }
-    .cert-grid{ grid-template-columns:1fr; }
+    .skills-grid{ grid-template-columns:1fr; gap:12px; }
     .contact-grid{ grid-template-columns:1fr; gap:28px; }
     section{ padding:56px 0; }
 
@@ -799,17 +806,122 @@
     .tl-item .when{ text-align:left; padding:3px 0 4px 16px; }
     .tl-node{ align-self:start; }
     .tl-body{ padding-left:16px; }
+
+    /* Every section gets its own tint so scrolling reads as distinct chapters */
+    .hero{ background:var(--paper); }
+    #work{ background:var(--tint-navy); }
+    #projects{ background:var(--tint-ochre); }
+    #experience{ background:var(--paper-2); }
+    #skills{ background:var(--tint-navy); }
+    #certifications{ background:var(--tint-ochre); }
+    #contact{ background:var(--paper-2); }
+
+    /* Case studies: 4 small playing cards */
+    .case-grid{ grid-template-columns:repeat(2, 1fr); gap:14px; }
+    .case-card{
+      min-height:0;
+      aspect-ratio:3/4;
+      padding:32px 14px 16px;
+      text-align:center;
+      align-items:center;
+    }
+    .case-card .case-desc,
+    .case-card .tags{ display:none; }
+    .case-card .case-kicker{ font-size:0.58rem; }
+    .case-card h3{ font-size:1.02rem; margin-top:8px; line-height:1.2; }
+    .case-hook{ font-size:0.8rem; margin-top:8px; }
+    .case-foot{ margin-top:auto; padding-top:14px; justify-content:center; width:100%; }
+    .case-cta{ font-size:0.6rem; }
+
+    /* Assignments: keep the 3 simple playing cards, made small and compact */
+    .projects-grid{ grid-template-columns:repeat(2, 1fr); gap:12px; }
+    .playcard{
+      aspect-ratio:3/3.6;
+      padding:16px 12px;
+      border-radius:12px;
+    }
+    .playcard-mark{ font-size:1.3rem; }
+    .playcard-company{ font-size:0.6rem; margin-top:6px; }
+    .playcard-title{ font-size:0.92rem; margin-top:5px; line-height:1.2; }
+    .playcard-desc{ display:none; }
+    .playcard-link{ font-size:0.62rem; margin-top:8px; }
+    .playcard-corner{ top:10px; left:10px; }
+    .playcard-corner.bottom{ top:auto; bottom:10px; right:10px; }
+    .playcard-corner .idx{ font-size:0.75rem; }
+    .playcard-corner .suit{ font-size:0.68rem; }
+
+    /* Skills becomes a real tap-to-expand accordion */
+    .skill-acc{
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--card);
+      overflow:hidden;
+      transition:border-color .25s ease, box-shadow .25s ease;
+    }
+    .skill-acc[open]{ border-color:var(--navy); box-shadow:0 10px 20px -16px rgba(29,53,87,0.35); }
+    .skill-acc summary.skill-btn{
+      cursor:pointer;
+      pointer-events:auto;
+      margin:0;
+      padding:16px 18px;
+      border-bottom:none;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .skill-acc summary.skill-btn::after{
+      content:"+";
+      font-family:'IBM Plex Mono', monospace;
+      font-size:0.9rem;
+      color:var(--navy);
+      transition:transform .25s ease;
+    }
+    .skill-acc[open] summary.skill-btn::after{ content:"–"; }
+    .skill-acc:active{ transform:scale(0.99); }
+    details.skill-acc > ul{ display:none; padding:0 18px 18px; margin:0; border-top:1px solid var(--line); padding-top:12px; }
+    details.skill-acc[open] > ul{ display:block; }
+
+    /* Certifications: animated playing cards */
+    .cert-grid{ grid-template-columns:repeat(2, 1fr); gap:14px; }
+    .cert-item{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      aspect-ratio:1/1.05;
+      border:1px solid var(--line);
+      border-top:1px solid var(--line);
+      border-radius:14px;
+      background:var(--card);
+      padding:20px 12px 16px;
+      box-shadow:0 2px 0 var(--line), 0 10px 20px -14px rgba(22,25,29,0.3);
+      transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .cert-item::before{
+      content:"◆";
+      display:block;
+      font-size:1.3rem;
+      color:var(--ochre);
+      margin-bottom:8px;
+      animation:certPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes certPulse{ 0%,100%{ opacity:0.55; transform:scale(1); } 50%{ opacity:1; transform:scale(1.12); } }
+    .cert-item:active{
+      transform:scale(0.96);
+      border-color:var(--navy);
+      box-shadow:0 2px 0 var(--navy), 0 14px 24px -16px rgba(29,53,87,0.35);
+    }
+    .cert-item .name{ flex-direction:column; gap:4px; font-size:0.92rem; }
+    .cert-item .issuer{ margin-top:6px; }
   }
   @media (max-width: 640px){
     body{ font-size:16px; }
     .hero-cta{ gap:10px; }
     .hero-cta .btn{ flex:1 1 auto; text-align:center; padding:13px 16px; }
     .hero-cta .btn.primary{ flex-basis:100%; }
-    .case-card{ padding:48px 20px 24px; border-radius:14px; }
-    .case-card h3{ font-size:1.35rem; }
-    .case-foot{ flex-direction:column; align-items:flex-start; }
-    .projects-grid{ grid-template-columns:1fr; }
-    .playcard{ max-width:360px; width:100%; margin:0 auto; aspect-ratio:4/5; }
     .section-title, .contact-grid h2{ font-size:1.8rem; }
     .contact-card{ grid-template-columns:40px 1fr auto; gap:12px; padding:12px 14px; }
     .ci{ width:40px; height:40px; }
@@ -820,6 +932,21 @@
     .av-core .then{ font-size:0.46rem; }
     .code-line{ font-size:0.62rem; padding:7px 10px; }
     .task{ font-size:0.58rem; }
+  }
+  @media (max-width: 380px){
+    .nav-links{ grid-template-columns:1fr; }
+    .nav-links a{ padding:13px 10px; }
+    .wrap{ padding:0 14px; }
+    .hero h1{ font-size:2.1rem; }
+    .case-card h3{ font-size:1.2rem; }
+    .case-grid{ grid-template-columns:1fr; }
+    .case-card{ aspect-ratio:auto; padding:28px 20px 20px; }
+    .projects-grid{ gap:10px; }
+    .playcard{ padding:14px 10px; }
+    .playcard-title{ font-size:0.86rem; }
+    .cert-grid{ grid-template-columns:1fr; }
+    .cert-item{ aspect-ratio:auto; flex-direction:row; text-align:left; justify-content:flex-start; padding:16px; }
+    .cert-item::before{ margin:0 12px 0 0; }
   }
 
   /* touch screens: no sticky hover lifts, press feedback instead */
@@ -1010,7 +1137,7 @@
 <section id="projects">
   <div class="wrap wide">
     <div class="eyebrow"><span class="num mono">02</span><span class="label">Selected Assignments</span></div>
-    <h2 class="section-title" style="font-size:2rem;">Assignments for companies I'm in the running with.</h2>
+    <h2 class="section-title" style="font-size:2rem;">Assignments from companies </h2>
     <p class="section-lede" style="margin-bottom:40px;">Shorter, sharper deliverables done for specific evaluation/interview rounds — not full case studies, but real structured work.</p>
 
     <div class="projects-grid">
@@ -1110,8 +1237,8 @@
   <div class="wrap">
     <div class="eyebrow"><span class="num mono">04</span><span class="label">Skills</span></div>
     <div class="skills-grid">
-      <div class="skill-block reveal">
-        <span class="k">Product</span>
+      <details class="skill-block skill-acc reveal">
+        <summary class="k skill-btn">Product</summary>
         <ul>
           <li>PRD Writing</li>
           <li>User Stories</li>
@@ -1119,9 +1246,9 @@
           <li>Metrics Definition</li>
           <li>Market Research</li>
         </ul>
-      </div>
-      <div class="skill-block reveal">
-        <span class="k">Tools</span>
+      </details>
+      <details class="skill-block skill-acc reveal">
+        <summary class="k skill-btn">Tools</summary>
         <ul>
           <li>Jira</li>
           <li>Notion</li>
@@ -1129,9 +1256,9 @@
           <li>ChatGPT</li>
           <li>Google Docs</li>
         </ul>
-      </div>
-      <div class="skill-block reveal">
-        <span class="k">Technical</span>
+      </details>
+      <details class="skill-block skill-acc reveal">
+        <summary class="k skill-btn">Technical</summary>
         <ul>
           <li>SQL</li>
           <li>Java</li>
@@ -1139,7 +1266,7 @@
           <li>DBMS</li>
           <li>API Fundamentals</li>
         </ul>
-      </div>
+      </details>
     </div>
   </div>
 </section>
