@@ -358,21 +358,24 @@
   /* ---------- CASE STUDIES (card grid) ---------- */
   .case-grid{
     display:grid;
-    grid-template-columns:repeat(2, 1fr);
-    gap:26px;
-    margin-top:40px;
+    grid-template-columns:repeat(4, 1fr);
+    gap:18px;
+    margin-top:32px;
   }
   .case-card{
     position:relative;
     display:flex;
     flex-direction:column;
-    min-height:380px;
-    padding:52px 36px 34px;
+    min-height:0;
+    aspect-ratio:3/3.6;
+    padding:28px 18px 16px;
     background:var(--card);
     border:1px solid var(--line);
-    border-radius:16px;
+    border-radius:14px;
     text-decoration:none;
     color:var(--ink);
+    text-align:center;
+    align-items:center;
     box-shadow:0 2px 0 var(--line), 0 12px 28px -18px rgba(26,26,24,0.35);
     transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
   }
@@ -384,22 +387,24 @@
   .case-card:nth-child(even):hover{ transform:translateY(-8px) rotate(0.6deg); }
   .case-kicker{
     font-family:'IBM Plex Mono', monospace;
-    font-size:0.66rem;
+    font-size:0.6rem;
     text-transform:uppercase;
     letter-spacing:0.1em;
     color:var(--ink-soft);
   }
-  .case-card h3{ font-size:1.55rem; margin-top:10px; line-height:1.18; }
-  .case-hook{ margin:12px 0 0; font-style:italic; color:var(--navy); font-size:1rem; }
-  .case-desc{ margin:10px 0 0; font-size:0.94rem; color:var(--ink-soft); }
+  .case-card h3{ font-size:1.05rem; margin-top:8px; line-height:1.2; }
+  .case-hook{ margin:8px 0 0; font-style:italic; color:var(--navy); font-size:0.82rem; }
+  .case-card .case-desc,
+  .case-card .tags{ display:none; }
   .case-foot{
     margin-top:auto;
-    padding-top:24px;
+    padding-top:14px;
     display:flex;
-    justify-content:space-between;
+    justify-content:center;
     align-items:flex-end;
     gap:14px;
     flex-wrap:wrap;
+    width:100%;
   }
   .case-cta{
     font-family:'IBM Plex Mono', monospace;
@@ -431,8 +436,8 @@
   /* playing-card corners (shared) */
   .playcard-corner{
     position:absolute;
-    top:16px;
-    left:18px;
+    top:12px;
+    left:14px;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -441,24 +446,28 @@
     font-family:'IBM Plex Mono', monospace;
   }
   .playcard-corner.warm{ color:var(--ochre); }
-  .playcard-corner .idx{ font-size:0.95rem; font-weight:600; }
-  .playcard-corner .suit{ font-size:0.85rem; margin-top:2px; }
-  .playcard-corner.bottom{ top:auto; bottom:16px; left:auto; right:18px; transform:rotate(180deg); }
+  .playcard-corner .idx{ font-size:0.75rem; font-weight:600; }
+  .playcard-corner .suit{ font-size:0.68rem; margin-top:2px; }
+  .playcard-corner.bottom{ top:auto; bottom:12px; left:auto; right:14px; transform:rotate(180deg); }
   .case-card .playcard-corner.bottom{ display:none; }
+  .case-card .playcard-corner{ top:12px; left:14px; }
+  .case-card .playcard-corner .idx{ font-size:0.75rem; }
+  .case-card .playcard-corner .suit{ font-size:0.68rem; }
+  .case-card .case-cta{ font-size:0.6rem; }
 
   /* ---------- SELECTED ASSIGNMENTS (playing cards) ---------- */
   .projects-grid{
     display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:28px;
+    grid-template-columns:repeat(4, 1fr);
+    gap:18px;
   }
   .playcard{
     position:relative;
-    aspect-ratio:3/4;
+    aspect-ratio:3/3.6;
     background:var(--card);
     border:1px solid var(--line);
-    border-radius:16px;
-    padding:28px;
+    border-radius:14px;
+    padding:18px;
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -471,28 +480,28 @@
     border-color:var(--navy);
   }
   .playcard-body{ text-align:center; }
-  .playcard-mark{ font-size:2.3rem; color:var(--ochre); }
+  .playcard-mark{ font-size:1.5rem; color:var(--ochre); }
   .playcard-company{
     font-family:'IBM Plex Mono', monospace;
-    font-size:0.72rem;
+    font-size:0.62rem;
     text-transform:uppercase;
     letter-spacing:0.1em;
     color:var(--ink-soft);
-    margin-top:12px;
+    margin-top:8px;
   }
   .playcard-title{
     font-family:'Fraunces', Georgia, serif;
-    font-size:1.4rem;
+    font-size:0.98rem;
     font-weight:600;
-    margin-top:8px;
-    line-height:1.25;
+    margin-top:6px;
+    line-height:1.2;
   }
-  .playcard-desc{ font-size:0.95rem; color:var(--ink-soft); margin-top:12px; }
+  .playcard-desc{ display:none; }
   .playcard-link{
     display:inline-block;
-    margin-top:16px;
+    margin-top:12px;
     font-family:'IBM Plex Mono', monospace;
-    font-size:0.7rem;
+    font-size:0.6rem;
     text-transform:uppercase;
     letter-spacing:0.08em;
     color:var(--navy);
@@ -816,22 +825,28 @@
     #certifications{ background:var(--tint-ochre); }
     #contact{ background:var(--paper-2); }
 
-    /* Case studies: 4 small playing cards */
-    .case-grid{ grid-template-columns:repeat(2, 1fr); gap:14px; }
+    /* Case studies: compact section header + 4 small playing cards, sized to fit one screen */
+    #work{ padding-top:32px; padding-bottom:32px; }
+    #work .section-title{ font-size:1.3rem; margin-bottom:6px; }
+    #work .section-lede{ font-size:0.8rem; margin-bottom:16px; }
+    .case-grid{ grid-template-columns:repeat(2, 1fr); gap:10px; }
     .case-card{
       min-height:0;
-      aspect-ratio:3/4;
-      padding:32px 14px 16px;
+      aspect-ratio:3/3.3;
+      padding:18px 10px 10px;
       text-align:center;
       align-items:center;
     }
     .case-card .case-desc,
     .case-card .tags{ display:none; }
-    .case-card .case-kicker{ font-size:0.58rem; }
-    .case-card h3{ font-size:1.02rem; margin-top:8px; line-height:1.2; }
-    .case-hook{ font-size:0.8rem; margin-top:8px; }
-    .case-foot{ margin-top:auto; padding-top:14px; justify-content:center; width:100%; }
-    .case-cta{ font-size:0.6rem; }
+    .case-card .case-kicker{ font-size:0.52rem; }
+    .case-card h3{ font-size:0.88rem; margin-top:6px; line-height:1.15; }
+    .case-hook{ font-size:0.7rem; margin-top:5px; line-height:1.25; }
+    .case-foot{ margin-top:auto; padding-top:8px; justify-content:center; width:100%; }
+    .case-cta{ font-size:0.54rem; }
+    .case-card .playcard-corner{ top:8px; left:8px; }
+    .case-card .playcard-corner .idx{ font-size:0.68rem; }
+    .case-card .playcard-corner .suit{ font-size:0.62rem; }
 
     /* Assignments: keep the 3 simple playing cards, made small and compact */
     .projects-grid{ grid-template-columns:repeat(2, 1fr); gap:12px; }
@@ -938,9 +953,10 @@
     .nav-links a{ padding:13px 10px; }
     .wrap{ padding:0 14px; }
     .hero h1{ font-size:2.1rem; }
-    .case-card h3{ font-size:1.2rem; }
-    .case-grid{ grid-template-columns:1fr; }
-    .case-card{ aspect-ratio:auto; padding:28px 20px 20px; }
+    .case-grid{ gap:8px; }
+    .case-card{ padding:14px 8px 8px; }
+    .case-card h3{ font-size:0.82rem; }
+    .case-hook{ font-size:0.66rem; }
     .projects-grid{ gap:10px; }
     .playcard{ padding:14px 10px; }
     .playcard-title{ font-size:0.86rem; }
@@ -1012,9 +1028,9 @@
         <h1>Curious about<br><em>why</em>, before <em>what</em>.</h1>
         <p class="hero-sub">I'm Utkarsh Pal — an aspiring Product Manager with an engineering background. I'm drawn to how teams decide what to build, and why some products become part of people's everyday lives while others don't. This portfolio is a collection of self-directed product thinking, built to practice and demonstrate that curiosity.</p>
         <div class="hero-cta">
-          <a class="btn primary" href="#work">Read the case studies</a>
+          <a class="btn primary" href="https://drive.google.com/file/d/1kh2t0eqb4bIdO64_zBF9NyjGwRgtXjws/view?usp=sharing" target="_blank" rel="noopener">View Resume ↗</a>
           <a class="btn" href="#contact">Get in touch</a>
-          <a class="btn" href="https://drive.google.com/file/d/1x2D8ha0PHS8ZzdJ8vUwYekOQ1oiWwqPT/view?usp=sharing" target="_blank" rel="noopener">View Resume ↗</a>
+          <a class="btn" href="#work">Read the case studies</a>
         </div>
       </div>
 
@@ -1063,18 +1079,17 @@
     <p class="section-lede">Each card opens the full write-up. The tags say exactly what kind of work went into each one, so nothing here overclaims.</p>
 
     <div class="case-grid">
-      <!-- 01 — AI EVAL -->
-      <a class="case-card reveal" href="https://www.notion.so/3b5724e42bdf80939688e68ba8e21e36?pvs=25" target="_blank" rel="noopener">
+      <!-- 01 — RAPIDO/UBER BIKE SAFETY STUDY -->
+      <a class="case-card reveal" href="https://app.notion.com/p/Rapido-Uber-bike-Safety-Study-3ec724e42bdf803ea699f961f4b8c352?source=copy_link" target="_blank" rel="noopener">
         <span class="playcard-corner warm"><span class="idx">01</span><span class="suit">♦</span></span>
-        <span class="case-kicker">Case 01 · AI evaluation</span>
-        <h3>AI Text-to-Image Evaluation for India</h3>
-        <p class="case-hook">Is "visually good" the same as "advertisement-ready"?</p>
-        <p class="case-desc">A human-centered evaluation of three text-to-image models against a real festive ad brief for an Indian fashion brand — 9 participants, 7 criteria, one clear winner.</p>
+        <span class="case-kicker">Case 01 · Safety study</span>
+        <h3>Rapido / Uber Bike Safety Study</h3>
+        <p class="case-hook">A closer look at rider safety on bike-taxi platforms.</p>
+        <p class="case-desc">A product safety study examining the bike-taxi riding experience on platforms like Rapido and Uber.</p>
         <div class="case-foot">
           <div class="tags">
-            <span class="tag">Human evaluation</span>
-            <span class="tag ochre">Cross-model</span>
-            <span class="tag">Quant + qual</span>
+            <span class="tag">Safety &amp; trust</span>
+            <span class="tag ochre">Bike-taxi</span>
           </div>
           <span class="case-cta">Read on Notion <span class="ar">↗</span></span>
         </div>
@@ -1137,7 +1152,7 @@
 <section id="projects">
   <div class="wrap wide">
     <div class="eyebrow"><span class="num mono">02</span><span class="label">Selected Assignments</span></div>
-    <h2 class="section-title" style="font-size:2rem;">Assignments from companies </h2>
+    <h2 class="section-title" style="font-size:2rem;">Assignments for companies I'm in the running with.</h2>
     <p class="section-lede" style="margin-bottom:40px;">Shorter, sharper deliverables done for specific evaluation/interview rounds — not full case studies, but real structured work.</p>
 
     <div class="projects-grid">
@@ -1178,6 +1193,19 @@
           <a class="playcard-link" href="https://docs.google.com/document/d/1Pwav9jj2uo9jTfMm9q7wd6cH1xIkGqMovv_KHZdl75I/edit?usp=sharing" target="_blank" rel="noopener">View ↗</a>
         </div>
         <span class="playcard-corner bottom"><span class="idx">03</span><span class="suit">♣</span></span>
+      </div>
+
+      <!-- JOSH TALKS -->
+      <div class="playcard reveal">
+        <span class="playcard-corner warm"><span class="idx">04</span><span class="suit">♥</span></span>
+        <div class="playcard-body">
+          <div class="playcard-mark">◆</div>
+          <div class="playcard-company">Josh Talks</div>
+          <div class="playcard-title">Transcriber Quality Evaluation</div>
+          <p class="playcard-desc">An evaluation of transcription quality for Josh Talks' content.</p>
+          <a class="playcard-link" href="https://docs.google.com/document/d/12NE_lV0uhLO0VtdjLIaRiB1TnEFrjj7lceUhwrGYA1M/edit?usp=sharing" target="_blank" rel="noopener">View ↗</a>
+        </div>
+        <span class="playcard-corner warm bottom"><span class="idx">04</span><span class="suit">♥</span></span>
       </div>
     </div>
   </div>
