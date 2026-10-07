@@ -195,6 +195,10 @@
   .tab[aria-selected="true"]{ background:var(--ink); color:#fff; }
   .spec-panel{ padding:6px 18px 18px; }
   .spec-panel[hidden]{ display:none; }
+  .spec-body{ position:relative; }
+  #panel-prd[hidden]{ display:block; visibility:hidden; }
+  #panel-map{ position:absolute; inset:0; display:flex; flex-direction:column; }
+  #panel-map[hidden]{ display:none; }
   .row{ display:grid; grid-template-columns:112px 1fr; gap:12px; padding:11px 0; border-bottom:1px dashed var(--line); }
   .row:last-child{ border-bottom:0; }
   .row dt{ font-family:'IBM Plex Mono', monospace; font-size:0.64rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); padding-top:3px; }
@@ -209,7 +213,7 @@
 
   /* mindmap orbit */
   .av-stage{
-    position:relative; aspect-ratio:1/1; margin:14px 0 4px; border-radius:14px;
+    position:relative; flex:1 1 auto; min-height:0; aspect-ratio:1/1; align-self:center; margin:10px 0 2px; border-radius:14px;
     background-image:radial-gradient(var(--line) 1px, transparent 1px); background-size:18px 18px;
   }
   .ring{ position:absolute; top:50%; left:50%; border-radius:50%; transform:translate(-50%,-50%); }
@@ -233,9 +237,9 @@
   }
   .av-core::after{ content:""; position:absolute; inset:0; border-radius:50%; border:2px solid var(--indigo); animation:pulse 2.8s ease-out infinite; }
   @keyframes pulse{ from{ transform:scale(1); opacity:0.6; } to{ transform:scale(1.7); opacity:0; } }
-  .av-core .why{ font-family:'Fraunces', serif; font-style:italic; font-size:clamp(1.3rem, 2.6vw, 1.8rem); line-height:1; }
+  .av-core .why{ font-family:'Fraunces', serif; font-style:italic; font-size:clamp(1.1rem, 2.2vw, 1.4rem); line-height:1; }
   .av-core .then{ font-family:'IBM Plex Mono', monospace; font-size:0.5rem; text-transform:uppercase; letter-spacing:0.1em; opacity:0.85; margin-top:5px; }
-  .av-rotator{ margin:8px 0 0; min-height:2.9em; font-size:0.92rem; color:var(--ink-soft); display:flex; gap:8px; }
+  .av-rotator{ margin:6px 0 0; min-height:2.9em; font-size:0.86rem; flex-shrink:0; color:var(--ink-soft); display:flex; gap:8px; }
   .av-rotator .arrow{ color:var(--coral); font-family:'IBM Plex Mono', monospace; }
   #avLine{ display:inline-block; transition:opacity .4s ease, transform .4s ease; }
   #avLine.out{ opacity:0; transform:translateY(6px); }
@@ -307,42 +311,6 @@
   .a-coral{ --accent:var(--coral); --accent-soft:var(--coral-soft); }
   .a-mint{ --accent:var(--mint); --accent-soft:var(--mint-soft); }
   .a-sun{ --accent:#d98a00; --accent-soft:var(--sun-soft); }
-
-  /* ---------- PROCESS ---------- */
-  #process{ background:var(--indigo-soft); --accent:var(--indigo); }
-  .proc{ margin-top:36px; background:var(--card); border:1.5px solid var(--ink); border-radius:20px; overflow:hidden; box-shadow:8px 8px 0 var(--ink); }
-  .proc-steps{ display:grid; grid-template-columns:repeat(5,1fr); border-bottom:1.5px solid var(--ink); }
-  .pstep{
-    position:relative; border:0; border-right:1px solid var(--line); background:var(--card); cursor:pointer;
-    padding:18px 10px; display:flex; flex-direction:column; align-items:center; gap:8px; color:var(--ink-soft);
-    font-family:'Instrument Sans', sans-serif; transition:background .25s ease, color .25s ease;
-  }
-  .pstep:last-child{ border-right:0; }
-  .pstep .pn{
-    width:36px; height:36px; border-radius:50%; display:grid; place-items:center;
-    font-family:'IBM Plex Mono', monospace; font-size:0.72rem; font-weight:600;
-    border:1.5px solid var(--accent); color:var(--accent); background:#fff; transition:all .25s ease;
-  }
-  .pstep .pl{ font-weight:600; font-size:0.95rem; }
-  .pstep::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:4px; background:var(--accent); transform:scaleX(0); transition:transform .3s ease; }
-  .pstep[aria-selected="true"]{ background:var(--accent-soft); color:var(--ink); }
-  .pstep[aria-selected="true"] .pn{ background:var(--accent); color:#fff; }
-  .pstep[aria-selected="true"]::after{ transform:scaleX(1); }
-  .pstep:hover .pn{ transform:scale(1.08); }
-  .proc-panel{ padding:30px 32px 32px; display:grid; grid-template-columns:1.2fr 1fr; gap:28px; align-items:start; animation:fadeUp .4s ease; }
-  .proc-panel[hidden]{ display:none; }
-  @keyframes fadeUp{ from{ opacity:0; transform:translateY(8px); } }
-  .proc-panel h3{ font-size:1.55rem; }
-  .proc-panel p{ color:var(--ink-soft); margin:10px 0 0; }
-  .proof-k{ display:block; font-family:'IBM Plex Mono', monospace; font-size:0.64rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--ink-soft); margin-bottom:10px; }
-  .proof{ display:grid; gap:8px; }
-  .proof a{
-    display:flex; justify-content:space-between; align-items:center; gap:10px; text-decoration:none; color:var(--ink);
-    font-weight:500; font-size:0.92rem; padding:11px 14px; border:1px solid var(--line); border-radius:12px; background:var(--paper);
-    transition:border-color .2s ease, transform .2s ease, background .2s ease;
-  }
-  .proof a:hover{ border-color:var(--accent); background:var(--accent-soft); transform:translateX(4px); }
-  .proof a span{ color:var(--accent); font-family:'IBM Plex Mono', monospace; }
 
   /* ---------- FIELD TESTS ---------- */
   #projects{ background:var(--sun-soft); --accent:var(--coral); }
@@ -524,11 +492,6 @@
     .flag-main{ padding:26px 22px; }
     .flag h3{ font-size:1.6rem; }
     .flag-flow{ padding:22px; }
-    .proc-steps{ grid-template-columns:repeat(5,1fr); }
-    .pstep{ padding:14px 2px; gap:6px; min-width:0; }
-    .pstep .pn{ width:30px; height:30px; font-size:0.64rem; }
-    .pstep .pl{ font-size:0.68rem; }
-    .proc-panel{ grid-template-columns:1fr; padding:22px; gap:18px; }
     .specs{ grid-template-columns:1fr; }
     .spec-block summary{ cursor:pointer; pointer-events:auto; -webkit-tap-highlight-color:transparent; }
     .spec-block .chev{ display:grid; }
@@ -565,7 +528,6 @@
     .specs{ gap:12px; } .spec-block{ padding:16px; } .spec-block .sub{ font-size:0.8rem; margin:6px 0 12px; } .sc{ font-size:0.78rem; padding:5px 10px; }
     .phase{ padding:16px; box-shadow:4px 4px 0 var(--accent); } .phase h3{ font-size:1.3rem; margin-top:10px; } .phase li{ font-size:0.84rem; } .phase ul{ gap:7px; margin-top:10px; }
     .tl-card{ padding:14px; } .tl-body h3{ font-size:1.15rem; } .notes li{ font-size:0.86rem; }
-    .proc-panel{ padding:16px; } .proc-panel h3{ font-size:1.15rem; } .proc-panel p{ font-size:0.88rem; } .proof a{ font-size:0.82rem; padding:9px 12px; }
     .spec-panel{ padding:4px 14px 14px; } .row{ padding:8px 0; } .row dd{ font-size:0.88rem; }
     .row{ grid-template-columns:1fr; gap:4px; }
     .notes li{ grid-template-columns:1fr; gap:4px; }
@@ -600,8 +562,8 @@
       <span class="nt-label">Menu</span><span class="burger" aria-hidden="true"><i></i><i></i></span>
     </button>
     <ul class="nav-links" id="navMenu">
+      <li><a href="https://drive.google.com/file/d/1Bqk7_TuH2PmG-zdGKarr-tyVNIqt8E8Z/view?usp=drive_link" target="_blank" rel="noopener">Resume ↗</a></li>
       <li><a href="#work">Features</a></li>
-      <li><a href="#process">Process</a></li>
       <li><a href="#projects">Field Tests</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#skills">Specs</a></li>
@@ -624,7 +586,7 @@
         <h1>Curious about <em>why</em>,<br>before <em>what</em>.</h1>
         <p class="hero-sub">I'm Utkarsh Pal. I take messy user problems, break them into <strong>clear bets</strong>, decide <strong>what not to build</strong>, and define <strong>how we'll know it worked</strong> — then talk it through with engineers in their own language.</p>
         <div class="hero-cta">
-          <a class="btn primary" href="https://drive.google.com/file/d/1kh2t0eqb4bIdO64_zBF9NyjGwRgtXjws/view?usp=sharing" target="_blank" rel="noopener">View Resume ↗</a>
+          <a class="btn primary" href="https://drive.google.com/file/d/1Bqk7_TuH2PmG-zdGKarr-tyVNIqt8E8Z/view?usp=drive_link" target="_blank" rel="noopener">View Resume ↗</a>
           <a class="btn" href="#work">See the work</a>
           <a class="btn" href="#contact">Get in touch</a>
         </div>
@@ -634,12 +596,13 @@
         <div class="spec-head">
           <span class="spec-id">PRD · UTK-001</span>
           <div class="tabs" role="tablist" aria-label="About views">
-            <button class="tab" role="tab" id="tab-prd" aria-selected="true" aria-controls="panel-prd">Spec</button>
-            <button class="tab" role="tab" id="tab-map" aria-selected="false" aria-controls="panel-map" tabindex="-1">Mindmap</button>
+            <button class="tab" role="tab" id="tab-prd" aria-selected="false" aria-controls="panel-prd" tabindex="-1">Spec</button>
+            <button class="tab" role="tab" id="tab-map" aria-selected="true" aria-controls="panel-map">Mindmap</button>
           </div>
         </div>
 
-        <div class="spec-panel" id="panel-prd" role="tabpanel" aria-labelledby="tab-prd">
+        <div class="spec-body">
+        <div class="spec-panel" id="panel-prd" role="tabpanel" aria-labelledby="tab-prd" hidden>
           <dl style="margin:0;">
             <div class="row"><dt>Product</dt><dd><strong>Utkarsh Pal</strong> — Product Manager</dd></div>
             <div class="row"><dt>Built for</dt><dd>Product teams hiring an APM / PM</dd></div>
@@ -656,7 +619,7 @@
           </dl>
         </div>
 
-        <div class="spec-panel" id="panel-map" role="tabpanel" aria-labelledby="tab-map" hidden>
+        <div class="spec-panel" id="panel-map" role="tabpanel" aria-labelledby="tab-map">
           <div class="av-stage">
             <div class="ring outer"></div>
             <div class="ring inner"></div>
@@ -673,6 +636,7 @@
             <div class="av-core"><span class="why">why?</span><span class="then">before what</span></div>
           </div>
           <p class="av-rotator"><span class="arrow">→</span><span id="avLine">I ask why before what.</span></p>
+        </div>
         </div>
       </div>
     </div>
@@ -699,7 +663,7 @@
     <p class="section-lede">Each one starts with a real user pain and ends with something a team could build and measure.</p>
 
     <!-- FLAGSHIP (desktop) -->
-    <a class="flag reveal" href="https://app.notion.com/p/Rapido-Uber-bike-Safety-Study-3ec724e42bdf803ea699f961f4b8c352?source=copy_link" target="_blank" rel="noopener">
+    <a class="flag reveal" href="https://app.notion.com/p/Rapido-Uber-Case-study-e11724e42bdf8358b1ce812f3dac8900?source=copy_link" target="_blank" rel="noopener">
       <div class="flag-main">
         <span class="flag-badge">★ Flagship · Case 01</span>
         <h3>Rapido / Uber Bike Safety</h3>
@@ -717,7 +681,7 @@
     </a>
 
     <div class="feat-grid">
-      <a class="feat a-indigo mob-only reveal" href="https://app.notion.com/p/Rapido-Uber-bike-Safety-Study-3ec724e42bdf803ea699f961f4b8c352?source=copy_link" target="_blank" rel="noopener">
+      <a class="feat a-indigo mob-only reveal" href="https://app.notion.com/p/Rapido-Uber-Case-study-e11724e42bdf8358b1ce812f3dac8900?source=copy_link" target="_blank" rel="noopener">
         <div class="feat-top">
           <span class="suit">♦</span>
           <span class="kicker">Case 01 · Flagship</span>
@@ -778,71 +742,10 @@
   </div>
 </section>
 
-<!-- ================= PROCESS ================= -->
-<section id="process">
-  <div class="wrap">
-    <div class="eyebrow"><span class="num">02</span><span class="label">How it works · Process</span></div>
-    <h2 class="section-title">Five steps. <em>Every one has proof.</em></h2>
-    <p class="section-lede">Tap a step to see how I approach it — and the work where I actually did it.</p>
-
-    <div class="proc reveal">
-      <div class="proc-steps" role="tablist" aria-label="How I work">
-        <button class="pstep a-indigo" role="tab" id="ps1" aria-selected="true" aria-controls="pp1"><span class="pn">01</span><span class="pl">Discover</span></button>
-        <button class="pstep a-coral" role="tab" id="ps2" aria-selected="false" aria-controls="pp2" tabindex="-1"><span class="pn">02</span><span class="pl">Define</span></button>
-        <button class="pstep a-sun" role="tab" id="ps3" aria-selected="false" aria-controls="pp3" tabindex="-1"><span class="pn">03</span><span class="pl">Prioritise</span></button>
-        <button class="pstep a-mint" role="tab" id="ps4" aria-selected="false" aria-controls="pp4" tabindex="-1"><span class="pn">04</span><span class="pl">Measure</span></button>
-        <button class="pstep a-coral" role="tab" id="ps5" aria-selected="false" aria-controls="pp5" tabindex="-1"><span class="pn">05</span><span class="pl">Plan</span></button>
-      </div>
-
-      <div class="proc-panel a-indigo" id="pp1" role="tabpanel" aria-labelledby="ps1">
-        <div><h3>Start with the market and the user — not the solution.</h3><p>Before proposing anything, I map who is hurting, how big the space is, and who is already playing in it.</p></div>
-        <div><span class="proof-k">Where I did this</span><div class="proof">
-          <a href="https://docs.google.com/document/d/1psPsoAjvL8bXnXX0rNoWgdYR4bCgHYN_a0uXsFgwiE4/edit?tab=t.0" target="_blank" rel="noopener">Voice AI Market Research <span>↗</span></a>
-          <a href="https://app.notion.com/p/Rapido-Uber-bike-Safety-Study-3ec724e42bdf803ea699f961f4b8c352?source=copy_link" target="_blank" rel="noopener">Rapido / Uber Bike Safety <span>↗</span></a>
-          <a href="https://docs.google.com/document/d/1A77eRFldjsw7gq4gvbkx-7x7yQV7FwVz-ZCuKc0T9Wc/edit?usp=sharing" target="_blank" rel="noopener">Accredian · Learning Product Research <span>↗</span></a>
-        </div></div>
-      </div>
-
-      <div class="proc-panel a-coral" id="pp2" role="tabpanel" aria-labelledby="ps2" hidden>
-        <div><h3>Turn a vague pain into sharp sub-problems.</h3><p>I split a big problem into pieces a team can act on, and anchor each one to a real persona.</p></div>
-        <div><span class="proof-k">Where I did this</span><div class="proof">
-          <a href="https://www.notion.so/395724e42bdf8014a7c2f1f1b4e565fa?pvs=25" target="_blank" rel="noopener">Instagram SafeConnect · 2 personas <span>↗</span></a>
-          <a href="https://www.notion.so/394724e42bdf80ef8ea4d341d2a6c783?pvs=25" target="_blank" rel="noopener">LinkedIn AI Discovery · problem framing <span>↗</span></a>
-        </div></div>
-      </div>
-
-      <div class="proc-panel a-sun" id="pp3" role="tabpanel" aria-labelledby="ps3" hidden>
-        <div><h3>Decide what <em>not</em> to build.</h3><p>Good prioritisation is mostly saying no. I use simple frameworks to make the trade-offs visible to everyone.</p></div>
-        <div><span class="proof-k">Where I did this</span><div class="proof">
-          <a href="https://www.notion.so/394724e42bdf80ef8ea4d341d2a6c783?pvs=25" target="_blank" rel="noopener">LinkedIn AI Discovery · MoSCoW <span>↗</span></a>
-          <a href="https://docs.google.com/document/d/1E70emqbNgpk5JjKQ4hUf0FKVjRQuUTxmx-OnICtBHRc/edit?usp=sharing" target="_blank" rel="noopener">Maximoney · Teardown &amp; recommendations <span>↗</span></a>
-        </div></div>
-      </div>
-
-      <div class="proc-panel a-mint" id="pp4" role="tabpanel" aria-labelledby="ps4" hidden>
-        <div><h3>Agree how we'll know it worked — before we build.</h3><p>Every idea gets a success metric up front, so the team is judged on outcomes, not output.</p></div>
-        <div><span class="proof-k">Where I did this</span><div class="proof">
-          <a href="https://www.notion.so/394724e42bdf80ef8ea4d341d2a6c783?pvs=25" target="_blank" rel="noopener">LinkedIn AI Discovery · success metrics <span>↗</span></a>
-          <a href="https://www.notion.so/395724e42bdf8014a7c2f1f1b4e565fa?pvs=25" target="_blank" rel="noopener">Instagram SafeConnect · KPIs <span>↗</span></a>
-          <a href="https://docs.google.com/document/d/12NE_lV0uhLO0VtdjLIaRiB1TnEFrjj7lceUhwrGYA1M/edit?usp=sharing" target="_blank" rel="noopener">Josh Talks · AI quality evaluation <span>↗</span></a>
-        </div></div>
-      </div>
-
-      <div class="proc-panel a-coral" id="pp5" role="tabpanel" aria-labelledby="ps5" hidden>
-        <div><h3>Sequence it into something a team can ship.</h3><p>I turn the plan into phases and loops, so value lands early and learning shapes the next step.</p></div>
-        <div><span class="proof-k">Where I did this</span><div class="proof">
-          <a href="https://www.notion.so/395724e42bdf8014a7c2f1f1b4e565fa?pvs=25" target="_blank" rel="noopener">Instagram SafeConnect · phased roadmap <span>↗</span></a>
-          <a href="https://docs.google.com/document/d/1Pwav9jj2uo9jTfMm9q7wd6cH1xIkGqMovv_KHZdl75I/edit?usp=sharing" target="_blank" rel="noopener">NPrep · 3-day engagement loop <span>↗</span></a>
-        </div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ================= FIELD TESTS (ASSIGNMENTS) ================= -->
 <section id="projects">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">03</span><span class="label">Field tests · Take-home assignments</span></div>
+    <div class="eyebrow"><span class="num">02</span><span class="label">Field tests · Take-home assignments</span></div>
     <h2 class="section-title">Tested by real companies, <em>under real deadlines</em>.</h2>
     <p class="section-lede">Short, sharp deliverables for interview rounds — each one a different PM muscle.</p>
 
@@ -890,7 +793,7 @@
 <!-- ================= CHANGELOG (EXPERIENCE) ================= -->
 <section id="experience">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">04</span><span class="label">Experience</span></div>
+    <div class="eyebrow"><span class="num">03</span><span class="label">Experience</span></div>
     <h2 class="section-title">Experience, <em>newest first</em>.</h2>
 
     <div class="timeline">
@@ -938,7 +841,7 @@
 <!-- ================= SPECS (SKILLS) ================= -->
 <section id="skills">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">05</span><span class="label">Tech specs · Skills</span></div>
+    <div class="eyebrow"><span class="num">04</span><span class="label">Tech specs · Skills</span></div>
     <h2 class="section-title">What's <em>under the hood</em>.</h2>
 
     <div class="specs">
@@ -978,7 +881,7 @@
 <!-- ================= INTEGRATIONS (CERTIFICATIONS) ================= -->
 <section id="certifications">
   <div class="wrap">
-    <div class="eyebrow"><span class="num">06</span><span class="label">Integrations · Certifications</span></div>
+    <div class="eyebrow"><span class="num">05</span><span class="label">Integrations · Certifications</span></div>
     <h2 class="section-title">Verified <em>add-ons</em>.</h2>
 
     <div class="certs">
@@ -1014,7 +917,7 @@
 <section id="contact">
   <span class="blob b1"></span><span class="blob b2"></span>
   <div class="wrap">
-    <div class="eyebrow"><span class="num">07</span><span class="label">Get access</span></div>
+    <div class="eyebrow"><span class="num">06</span><span class="label">Get access</span></div>
     <div class="contact-grid reveal">
       <div>
         <h2>Let's talk about products <em>worth building</em>.</h2>
@@ -1037,7 +940,7 @@
           <span><span class="cc-k">Phone</span><span class="cc-v">+91 91989 91011</span></span>
           <span class="cc-arrow">↗</span>
         </a>
-        <a class="contact-card" style="--c:#a59cff" href="https://drive.google.com/file/d/1kh2t0eqb4bIdO64_zBF9NyjGwRgtXjws/view?usp=sharing" target="_blank" rel="noopener">
+        <a class="contact-card" style="--c:#a59cff" href="https://drive.google.com/file/d/1Bqk7_TuH2PmG-zdGKarr-tyVNIqt8E8Z/view?usp=drive_link" target="_blank" rel="noopener">
           <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></span>
           <span><span class="cc-k">Resume</span><span class="cc-v">View the full resume</span></span>
           <span class="cc-arrow">↗</span>
@@ -1149,7 +1052,7 @@
     document.querySelectorAll('section[id]').forEach(function(s){ navIO.observe(s); });
   }
 
-  /* Accessible tabs (used by hero spec card and process) */
+  /* Accessible tabs (hero spec card) */
   function makeTabs(list){
     var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]'));
     function select(tab, focus){
